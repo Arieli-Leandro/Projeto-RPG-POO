@@ -2,6 +2,12 @@
 #include <iostream>
 using namespace std;
 
+/* O QUE FALTA IMPLEMENTAR?
+-> MAIN
+-> SUBIR DE PONTOS NAS PROFISSÕES
+-> VALIDAR OS PONTOS PARA SEREM NO MÁXIMO ATÉ 13
+*/
+
 //Fazer a superclasse para upar os níves de profissão e os do personagem
 
 /* Tabela de níveis máximos e mínimos de acordo com o livro */
@@ -32,11 +38,13 @@ class Profissao{
 
         };
 
-        bool transforma_pontos_experiencia(){
+        void transforma_pontos_experiencia(){
             while(nivel_geral_profissao >= 10){
                 nivel_geral_profissao = nivel_geral_profissao -10;
                 qtd_pontos_profissao += 1;
             }
+
+            return;
 
         };
 
@@ -74,9 +82,8 @@ class Mago: public Profissao{
         int lvl_resistir_magia;
 
     public: 
-        //fazer o construtor
         //Construtor tipo 1 - Usuário passou tds os parâmetros
-        Mago(int lvl_criar_ritual_user, int lvl_lancar_feitico_user, int lvl_educacao_user, int lvl_resistir_magia_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Mago(int lvl_criar_ritual_user, int lvl_lancar_feitico_user, int lvl_educacao_user, int lvl_resistir_magia_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_criar_ritual_user) == true){
                 this->lvl_criar_ritual = lvl_criar_ritual_user;
@@ -117,7 +124,7 @@ class Bardo: public Profissao{
         int lvl_ludibriar;
         int lvl_sabedoria_das_ruas;
     public: 
-        Bardo(int lvl_etiqueta_social_user, int lvl_ludibriar_user, int lvl_sabedoria_das_ruas_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Bardo(int lvl_etiqueta_social_user, int lvl_ludibriar_user, int lvl_sabedoria_das_ruas_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_etiqueta_social_user) == true){
                 this->lvl_etiqueta_social = lvl_etiqueta_social_user;
@@ -155,7 +162,7 @@ class Artesao: public Profissao{
         int lvl_fisico;
 
     public: 
-        Artesao(int lvl_educacao_user, int lvl_criacao_user, int lvl_negociacao_user, int lvl_fisico_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Artesao(int lvl_educacao_user, int lvl_criacao_user, int lvl_negociacao_user, int lvl_fisico_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_educacao_user) == true){
                 this->lvl_educacao = lvl_educacao_user;
@@ -199,7 +206,7 @@ class Criminoso: public Profissao{
 
     public: 
         //fazer o construtor
-        Criminoso(int lvl_arrombar_fechaduras_user, int lvl_falsificacao_user, int lvl_atletismo_user, int lvl_sabedoria_das_ruas_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Criminoso(int lvl_arrombar_fechaduras_user, int lvl_falsificacao_user, int lvl_atletismo_user, int lvl_sabedoria_das_ruas_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_arrombar_fechaduras_user) == true){
                 this->lvl_arrombar_fechaduras = lvl_arrombar_fechaduras_user;
@@ -242,7 +249,7 @@ class Doutor: public Profissao{
         int lvl_alquimia;
 
     public: 
-        Doutor(int lvl_carisma_user, int lvl_educacao_user, int lvl_coragem_user, int lvl_alquimia_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Doutor(int lvl_carisma_user, int lvl_educacao_user, int lvl_coragem_user, int lvl_alquimia_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_carisma_user) == true){
                 this->lvl_carisma = lvl_carisma_user;
@@ -285,7 +292,7 @@ class Cavaleiro: public Profissao{
         int lvl_esquivar;
 
     public: 
-        Cavaleiro(int lvl_coragem_user, int lvl_intimidacao_user, int lvl_sobrevivencia_user, int lvl_esquivar_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Cavaleiro(int lvl_coragem_user, int lvl_intimidacao_user, int lvl_sobrevivencia_user, int lvl_esquivar_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_coragem_user) == true){
                 this->lvl_coragem = lvl_coragem_user;
@@ -331,7 +338,7 @@ class Comerciante: public Profissao{
 
     public: 
         //Construtor tipo 1 - Usuário passou todos os Parâmetros
-        Comerciante(int lvl_carisma_user, int lvl_educacao_user, int lvl_negocios_user, int lvl_persuasao_user,int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Comerciante(int lvl_carisma_user, int lvl_educacao_user, int lvl_negocios_user, int lvl_persuasao_user,int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_carisma_user) == true){
                 this->lvl_carisma = lvl_carisma_user;
@@ -375,7 +382,7 @@ class Sacerdote: public Profissao{
 
     public: 
         //Construtor tipo 1 - Usuário passou todos os Parâmetros
-        Sacerdote(int lvl_criar_ritual_user, int lvl_coragem_user, int lvl_ensinar_user, int lvl_lancar_feitico_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
+        Sacerdote(int lvl_criar_ritual_user, int lvl_coragem_user, int lvl_ensinar_user, int lvl_lancar_feitico_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_criar_ritual_user) == true){
                 this->lvl_criar_ritual = lvl_criar_ritual_user;
@@ -414,17 +421,12 @@ class Sacerdote: public Profissao{
 class Desempregado: public Profissao{
 
     private:
-        int lvl_artesanato;
         int lvl_sobrevivencia;
         int lvl_consciencia;
 
     public: 
         //Construtor tipo 1 - Usuário passou todos os Parâmetros
-        Desempregado(int lvl_artesanato_user, int lvl_sobrevivencia_user, int lvl_consciencia_user, int nivel_geral_user):Profissao(nivel_geral_profissao){
-
-            if(valida_atributo_construtor(lvl_artesanato_user) == true){
-                this->lvl_artesanato = lvl_artesanato_user;
-            }else{this->lvl_artesanato = 0;}
+        Desempregado(int lvl_sobrevivencia_user, int lvl_consciencia_user, int nivel_geral_user):Profissao(nivel_geral_user){
 
             if(valida_atributo_construtor(lvl_sobrevivencia_user) == true){
                 this->lvl_sobrevivencia = lvl_sobrevivencia_user;
@@ -438,7 +440,6 @@ class Desempregado: public Profissao{
 
         //Constrtutor tipo 2 - Usuário nn passou nenhum parâmetro
         Desempregado():Profissao(){
-            this->lvl_artesanato = 0;
             this->lvl_sobrevivencia = 0;
             this->lvl_consciencia = 0;
         }
@@ -475,15 +476,16 @@ class Jogador{
 
             return retorno;
 
-        };
+        }
 
-        bool transforma_pontos_experiencia(){
+        void transforma_pontos_experiencia(){
             while(nivel_geral >= 10){
                 nivel_geral = nivel_geral -10;
                 qtd_pontos += 1;
             }
 
-        };
+            return;
+        }
 
     public:
         //Construtor tipo 1 - Usuário passou todos os Parâmetros
@@ -538,7 +540,7 @@ class Jogador{
         }
 
         //Método da classe mãe
-        void aumenta_nivel_habilidade(){
+        virtual void aumenta_nivel_habilidade(){
 
             int opcao = 0;
 
@@ -590,20 +592,10 @@ class Jogador{
                         lvl_inteligencia += 1;
                         cout << nome << "subiu de nivel Inteligencia!" << endl;
                         break;
-
                 }
-
-                
-                
-
             }else{
-
                 cout << nome << "Nao tem pontos suficientes para subir de nivel" << endl;
-
             }
-
-            
-
         }
 
         virtual void inicializa_jogador() = 0;
@@ -616,7 +608,7 @@ class Humano: public Jogador{
         int imunidade;
         int lvl_seducao;
         int lvl_persuasao;
-        int teimosia;
+        int lvl_teimosia;
 
     public:
         // Construtor tipo 1 - Usuário passou tds os parâmetros
@@ -634,8 +626,8 @@ class Humano: public Jogador{
             }else{this->lvl_persuasao = 0;}
 
             if(valida_atributo_construtor(teimosia_user) == true){
-                this->teimosia = teimosia_user;
-            }else{this->teimosia = 0;}
+                this->lvl_teimosia = teimosia_user;
+            }else{this->lvl_teimosia = 0;}
         }
 
         // Construtor tipo 2 - Usuário não passou nenhum parâmetro
@@ -643,13 +635,59 @@ class Humano: public Jogador{
             this->imunidade = 0;
             this->lvl_seducao = 0;
             this->lvl_persuasao = 0;
-            this->teimosia = 0;
+            this->lvl_teimosia = 0;
         }
 
         //polimorfismo
         void inicializa_jogador() override{
             return;
         }
+
+        void aumenta_nivel_habilidade() override {
+            // chama o método da classe mãe
+            Jogador::aumenta_nivel_habilidade();
+
+            int opcao = 0;
+
+            if(qtd_pontos > 0){
+
+                while(true){
+
+                    cout << "6 - Upar Habilidade dê: Seducao" << endl;
+                    cout << "7 - Upar Habilidade dê: Persuasao" << endl;
+                    cout << "8 - Upar Habilidade dê: Teimosia" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >=6 and opcao <=8){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 6: 
+                        qtd_pontos -= 1;
+                        lvl_seducao += 1;
+                        cout << nome << "subiu de nivel em Seducao!" << endl;
+                        break;
+                    
+                    case 7:
+                        qtd_pontos -= 1;
+                        lvl_persuasao += 1;
+                        cout << nome << "subiu de nivel em Persuacao!" << endl;
+                        break;
+                    
+                    case 8:
+                        qtd_pontos -= 1;
+                        lvl_teimosia += 1;
+                        cout << nome << "subiu de nivel em Persuacao!" << endl;
+                        break;                    
+                }
+            }else{
+                cout << nome << "Nao tem pontos suficientes para subir de nivel" << endl;
+            }
+}
 
 
 };
@@ -674,13 +712,44 @@ class Bruxo: public Jogador{
             this->lvl_reflexos_relampagos = 0;
         }
         
-
         //polimorfismo
         void inicializa_jogador() override{
             return;
         }
 
+        void aumenta_nivel_habilidade() override {
+            // chama o método da classe mãe
+            Jogador::aumenta_nivel_habilidade();
 
+            int opcao = 0;
+
+            if(qtd_pontos > 0){
+
+                while(true){
+
+                    cout << "6 - Upar Habilidade dê: Reflexos Relampagos" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao ==6){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 6: 
+                        qtd_pontos -= 1;
+                        lvl_reflexos_relampagos += 1;
+                        cout << nome << "subiu de nivel em Reflexos Relampagos!" << endl;
+                        break;
+               
+                }
+
+            }else{
+                cout << nome << "Nao tem pontos suficientes para subir de nivel" << endl;
+            }
+        }
 };
 
 class Anao: public Jogador{
@@ -717,8 +786,45 @@ class Anao: public Jogador{
             return;
         }
 
+        void aumenta_nivel_habilidade() override {
+            // chama o método da classe mãe
+            Jogador::aumenta_nivel_habilidade();
 
+            int opcao = 0;
 
+            if(qtd_pontos > 0){
+
+                while(true){
+
+                    cout << "6 - Upar Habilidade dê: Armaduras" << endl;
+                    cout << "7 - Upar Habilidade dê: Deducao" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 6 and opcao <= 7){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 6: 
+                        qtd_pontos -= 1;
+                        lvl_armadura += 1;
+                        cout << nome << "subiu de nivel em Armadura!" << endl;
+                        break;
+
+                    case 7: 
+                        qtd_pontos -= 1;
+                        lvl_deducao += 1;
+                        cout << nome << "subiu de nivel em Deducao!" << endl;
+                        break;               
+                }
+
+            }else{
+                cout << nome << "Nao tem pontos suficientes para subir de nivel" << endl;
+            }
+        }
 };
 
 class Elfo: public Jogador{
@@ -760,6 +866,53 @@ class Elfo: public Jogador{
         //polimorfismo
         void inicializa_jogador() override{
             return;
+        }
+
+        void aumenta_nivel_habilidade() override {
+            // chama o método da classe mãe
+            Jogador::aumenta_nivel_habilidade();
+
+            int opcao = 0;
+
+            if(qtd_pontos > 0){
+
+                while(true){
+
+                    cout << "6 - Upar Habilidade dê: Artesanato" << endl;
+                    cout << "7 - Upar Habilidade dê: Artilharia de Arcos" << endl;
+                    cout << "8 - Upar Habilidade dê: Sintonia da Natureza" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 6 and opcao <= 8){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 6: 
+                        qtd_pontos -= 1;
+                        lvl_artesanato += 1;
+                        cout << nome << "subiu de nivel em Artesanato!" << endl;
+                        break;
+
+                    case 7: 
+                        qtd_pontos -= 1;
+                        lvl_arcos += 1;
+                        cout << nome << "subiu de nivel em Artilharia de Arcos!" << endl;
+                        break; 
+
+                    case 8: 
+                        qtd_pontos -= 1;
+                        lvl_sintonia_natureza += 1;
+                        cout << nome << "subiu de nivel em Sinfonia da Natureza!" << endl;
+                        break;               
+                }
+
+            }else{
+                cout << nome << "Nao tem pontos suficientes para subir de nivel" << endl;
+            }
         }
 
     
