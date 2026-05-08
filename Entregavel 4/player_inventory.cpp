@@ -2,13 +2,6 @@
 #include <iostream>
 using namespace std;
 
-/* O QUE FALTA IMPLEMENTAR?
--> MAIN
--> SUBIR DE PONTOS NAS PROFISSÕES
--> VALIDAR OS PONTOS PARA SEREM NO MÁXIMO ATÉ 13
-*/
-
-//Fazer a superclasse para upar os níves de profissão e os do personagem
 
 /* Tabela de níveis máximos e mínimos de acordo com o livro */
 /* 
@@ -38,16 +31,7 @@ class Profissao{
 
         };
 
-        void transforma_pontos_experiencia(){
-            while(nivel_geral_profissao >= 10){
-                nivel_geral_profissao = nivel_geral_profissao -10;
-                qtd_pontos_profissao += 1;
-            }
-
-            return;
-
-        };
-
+        
     public:
 
         //Construtor tipo 1 - Usuário passou todos os Parâmetros
@@ -70,6 +54,30 @@ class Profissao{
         }
         
         virtual void inicializa_profissao() = 0;
+
+        void transforma_pontos_experiencia(){
+            while(nivel_geral_profissao >= 10){
+                nivel_geral_profissao = nivel_geral_profissao -10;
+                qtd_pontos_profissao += 1;
+            }
+
+            return;
+
+        };
+
+
+        //Impedindo de aumentar o lvl para maior que 13
+        bool verifica_aumenta_lvl_habilidade(int valor){
+            int retorno = true;
+
+            valor = valor + 1;
+            if(valor > 13){
+                retorno = false;
+            }
+
+            return retorno;
+
+        }
 
 };
 
@@ -115,6 +123,63 @@ class Mago: public Profissao{
         void inicializa_profissao() override{
             return;
         }
+
+        void aumenta_nivel_habilidade_profissao()  {
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Criar Ritual" << endl;
+                    cout << "2 - Upar Habilidade dê: Educacao" << endl;
+                    cout << "3 - Upar Habilidade dê: Lancar Feitico" << endl;
+                    cout << "4 - Upar Habilidade dê: Resistir Magia" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=4){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // Criar Ritual
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_criar_ritual) == true){
+                            lvl_criar_ritual += 1;
+                            cout << "subiu de nivel em Criar Ritual!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: //Educação
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_educacao) == true){
+                            lvl_educacao += 1;
+                            cout << "subiu de nivel em Educacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: //Lançar feitiço
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_lancar_feitico) == true){
+                            lvl_lancar_feitico += 1;
+                            cout << "subiu de nivel em Lancar Feitico!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 4: //Resistir Magia
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_resistir_magia) == true){
+                            lvl_resistir_magia += 1;
+                            cout << "subiu de nivel em Resistir a Magia!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+               
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
+        }
 };
 
 class Bardo: public Profissao{
@@ -150,6 +215,55 @@ class Bardo: public Profissao{
         //polimorfismo
         void inicializa_profissao() override{
             return;
+        }
+
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Etiqueta Social" << endl;
+                    cout << "2 - Upar Habilidade dê: Ludibriar" << endl;
+                    cout << "3 - Upar Habilidade dê: Sabedoria das Ruas" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=3){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // Etiqueta Social
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_etiqueta_social) == true){
+                            lvl_etiqueta_social += 1;
+                            cout << "subiu de nivel em Criar Ritual!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // Ludibriar
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_ludibriar) == true){
+                            lvl_ludibriar += 1;
+                            cout << "subiu de nivel em Educacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: //Sabedoria das ruas
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_sabedoria_das_ruas) == true){
+                            lvl_sabedoria_das_ruas += 1;
+                            cout << "subiu de nivel em Sabedoria das Ruas!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+               
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
         }
 };
 
@@ -193,6 +307,63 @@ class Artesao: public Profissao{
         //polimorfismo
         void inicializa_profissao() override{
             return;
+        }
+
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Educacao" << endl;
+                    cout << "2 - Upar Habilidade dê: Criacao" << endl;
+                    cout << "3 - Upar Habilidade dê: Negociacao" << endl;
+                    cout << "4 - Upar Habilidade dê: Fisico" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=4){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // Educacao
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_educacao) == true){
+                            lvl_educacao += 1;
+                            cout << "subiu de nivel em Educacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // Criação
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_criacao) == true){
+                            lvl_criacao += 1;
+                            cout << "subiu de nivel em Criacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: // Negociação
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_negociacao) == true){
+                            lvl_negociacao += 1;
+                            cout << "subiu de nivel em Negociacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 4: // Fisico
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_fisico) == true){
+                            lvl_fisico += 1;
+                            cout << "subiu de nivel em Fisico!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+               
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
         }
 };
 
@@ -238,6 +409,62 @@ class Criminoso: public Profissao{
         void inicializa_profissao() override{
             return;
         }
+
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Arrombar fechadura" << endl;
+                    cout << "2 - Upar Habilidade dê: Falsificacao" << endl;
+                    cout << "3 - Upar Habilidade dê: Atletismo" << endl;
+                    cout << "4 - Upar Habilidade dê: Sabedoria das Ruas" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=4){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // Arrombar fechadura
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_arrombar_fechaduras) == true){
+                            lvl_arrombar_fechaduras += 1;
+                            cout << "subiu de nivel em Arrombar fechaduras!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // Falsificação
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_falsificacao) == true){
+                            lvl_falsificacao += 1;
+                            cout << "subiu de nivel em Falsificacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: // Atletismo
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_atletismo) == true){
+                            lvl_atletismo += 1;
+                            cout << "subiu de nivel em Atletismo!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 4: // Sabedoria das Ruas
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_sabedoria_das_ruas) == true){
+                            lvl_sabedoria_das_ruas += 1;
+                            cout << "subiu de nivel em Sabedoria das Ruas!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
+        }
 };
 
 class Doutor: public Profissao{
@@ -273,13 +500,60 @@ class Doutor: public Profissao{
         Doutor():Profissao(){
             this->lvl_educacao = 0;
             this->lvl_coragem = 0;
-            this->lvl_coragem = 0;
             this->lvl_alquimia = 0;
         }
 
         //polimorfismo
         void inicializa_profissao() override{
             return;
+        }
+
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Educacao" << endl;
+                    cout << "2 - Upar Habilidade dê: Coragem" << endl;
+                    cout << "3 - Upar Habilidade dê: Alquimia" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=3){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // Educacao
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_educacao) == true){
+                            lvl_educacao += 1;
+                            cout << "subiu de nivel em Educacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // Coragem
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_coragem) == true){
+                            lvl_coragem += 1;
+                            cout << "subiu de nivel em Coragem!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: // Alquimia
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_alquimia) == true){
+                            lvl_alquimia += 1;
+                            cout << "subiu de nivel em Alquimia!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
         }
 };
 
@@ -323,6 +597,62 @@ class Cavaleiro: public Profissao{
         //polimorfismo
         void inicializa_profissao() override{
             return;
+        }
+
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Coragem" << endl;
+                    cout << "2 - Upar Habilidade dê: Intimidacao" << endl;
+                    cout << "3 - Upar Habilidade dê: Sobrevivencia" << endl;
+                    cout << "4 - Upar Habilidade dê: Esquivar" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=4){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // coragem
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_coragem) == true){
+                            lvl_coragem += 1;
+                            cout << "subiu de nivel em Coragem!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // intimidação
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_intimidacao) == true){
+                            lvl_intimidacao += 1;
+                            cout << "subiu de nivel em Intimidacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: // sobrevivencia
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_sobrevivencia) == true){
+                            lvl_sobrevivencia += 1;
+                            cout << "subiu de nivel em Sobrevivencia!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 4: // esquivar
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_esquivar) == true){
+                            lvl_esquivar += 1;
+                            cout << "subiu de nivel em Esquivar!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
         }
 
 
@@ -370,6 +700,62 @@ class Comerciante: public Profissao{
         void inicializa_profissao() override{
             return;
         }
+
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Carisma" << endl;
+                    cout << "2 - Upar Habilidade dê: Educacao" << endl;
+                    cout << "3 - Upar Habilidade dê: Negocios" << endl;
+                    cout << "4 - Upar Habilidade dê: Persuasao" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=4){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // carisma
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_carisma) == true){
+                            lvl_carisma += 1;
+                            cout << "subiu de nivel em Carisma!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // educacao
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_educacao) == true){
+                            lvl_educacao += 1;
+                            cout << "subiu de nivel em Educacao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: // negócios
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_negocios) == true){
+                            lvl_negocios += 1;
+                            cout << "subiu de nivel em Negocios!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 4: // persuasao
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_persuasao) == true){
+                            lvl_persuasao += 1;
+                            cout << "subiu de nivel em Persuasao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
+        }
 };
 
 class Sacerdote: public Profissao{
@@ -415,6 +801,62 @@ class Sacerdote: public Profissao{
             return;
         }
 
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Criar Ritual" << endl;
+                    cout << "2 - Upar Habilidade dê: Coragem" << endl;
+                    cout << "3 - Upar Habilidade dê: Ensinar" << endl;
+                    cout << "4 - Upar Habilidade dê: Lancar Feitico" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=4){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // criar ritual
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_criar_ritual) == true){
+                            lvl_criar_ritual += 1;
+                            cout << "subiu de nivel em Criar Ritual!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // coragem
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_coragem) == true){
+                            lvl_coragem += 1;
+                            cout << "subiu de nivel em Coragem!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 3: // ensinar
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_ensinar) == true){
+                            lvl_ensinar += 1;
+                            cout << "subiu de nivel em Ensinar!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 4: // lancar feitico
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_lancar_feitico) == true){
+                            lvl_lancar_feitico += 1;
+                            cout << "subiu de nivel em Lancar Feitico!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
+        }
+
 
 };
 
@@ -447,6 +889,46 @@ class Desempregado: public Profissao{
         //polimorfismo
         void inicializa_profissao() override{
             return;
+        }
+
+        void aumenta_nivel_habilidade_profissao(){
+            int opcao = 0;
+
+            if(qtd_pontos_profissao > 0){
+
+                while(true){
+
+                    cout << "1 - Upar Habilidade dê: Sobrevivencia" << endl;
+                    cout << "2 - Upar Habilidade dê: Consciencia" << endl;
+                    cout << "Digite uma opcao: " << endl;
+                    cin >> opcao;
+
+                    if(opcao >= 1 and opcao <=2){
+                        break;
+                    }else{cout << "Digite uma opcao valida!" << endl;}
+                }
+
+                switch(opcao){
+
+                    case 1: // sobrevivencia
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_sobrevivencia) == true){
+                            lvl_sobrevivencia += 1;
+                            cout << "subiu de nivel em Sobrevivencia!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                    case 2: // consciencia
+                        qtd_pontos_profissao -= 1;
+                        if(verifica_aumenta_lvl_habilidade(lvl_consciencia) == true){
+                            lvl_consciencia += 1;
+                            cout << "subiu de nivel em Consciencia!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        break;
+                }
+
+            }else{
+                cout << "Voce nao tem pontos suficientes para subir de nivel" << endl;
+            }
         }
     
 };
@@ -539,6 +1021,19 @@ class Jogador{
             cout << "Removendo os dados do jogador:" << nome << endl;
         }
 
+        //Impedindo de aumentar o lvl para maior que 13
+        bool verifica_aumenta_lvl_habilidade(int valor){
+            int retorno = true;
+
+            valor = valor + 1;
+            if(valor > 13){
+                retorno = false;
+            }
+
+            return retorno;
+
+        }
+
         //Método da classe mãe
         virtual void aumenta_nivel_habilidade(){
 
@@ -565,32 +1060,45 @@ class Jogador{
 
                     case 1: //Aposta
                         qtd_pontos -= 1;
-                        lvl_apostar += 1;
-                        cout << nome << "subiu de nivel em Aposta!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_apostar) == true){
+                            lvl_apostar += 1;
+                            cout << nome << "subiu de nivel em Aposta!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
+                        
                         break;
 
                     case 2: //Brigar
                         qtd_pontos -= 1;
-                        lvl_brigar += 1;
-                        cout << nome << "subiu de nivel em Brigar!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_brigar) == true){
+                            lvl_brigar += 1;
+                            cout << nome << "subiu de nivel em Brigar!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
 
                     case 3: //Coragem
                         qtd_pontos -= 1;
-                        lvl_coragem += 1;
-                        cout << nome << "subiu de nivel em Coragem!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_coragem) == true){
+                            lvl_coragem += 1;
+                            cout << nome << "subiu de nivel em Coragem!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
 
                     case 4: //Forca
                         qtd_pontos -= 1;
                         lvl_forca += 1;
-                        cout << nome << "subiu de nivel em Forca!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_forca) == true){
+                            lvl_forca += 1;
+                            cout << nome << "subiu de nivel em Forca!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
 
                     case 5: //Inteligencia
                         qtd_pontos -= 1;
                         lvl_inteligencia += 1;
-                        cout << nome << "subiu de nivel Inteligencia!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_inteligencia) == true){
+                            lvl_inteligencia += 1;
+                            cout << nome << "subiu de nivel em Inteligencia!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
                 }
             }else{
@@ -668,20 +1176,26 @@ class Humano: public Jogador{
 
                     case 6: 
                         qtd_pontos -= 1;
-                        lvl_seducao += 1;
-                        cout << nome << "subiu de nivel em Seducao!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_seducao) == true){
+                            lvl_seducao += 1;
+                            cout << nome << "subiu de nivel em Seducao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
                     
                     case 7:
                         qtd_pontos -= 1;
-                        lvl_persuasao += 1;
-                        cout << nome << "subiu de nivel em Persuacao!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_persuasao) == true){
+                            lvl_persuasao += 1;
+                            cout << nome << "subiu de nivel em Persuasao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
                     
                     case 8:
                         qtd_pontos -= 1;
-                        lvl_teimosia += 1;
-                        cout << nome << "subiu de nivel em Persuacao!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_teimosia) == true){
+                            lvl_teimosia += 1;
+                            cout << nome << "subiu de nivel em Teimosia!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;                    
                 }
             }else{
@@ -740,8 +1254,10 @@ class Bruxo: public Jogador{
 
                     case 6: 
                         qtd_pontos -= 1;
-                        lvl_reflexos_relampagos += 1;
-                        cout << nome << "subiu de nivel em Reflexos Relampagos!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_reflexos_relampagos) == true){
+                            lvl_reflexos_relampagos += 1;
+                            cout << nome << "subiu de nivel em Reflexos Relampagos!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
                
                 }
@@ -810,14 +1326,18 @@ class Anao: public Jogador{
 
                     case 6: 
                         qtd_pontos -= 1;
-                        lvl_armadura += 1;
-                        cout << nome << "subiu de nivel em Armadura!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_armadura) == true){
+                            lvl_armadura += 1;
+                            cout << nome << "subiu de nivel em Armadura!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
 
                     case 7: 
                         qtd_pontos -= 1;
-                        lvl_deducao += 1;
-                        cout << nome << "subiu de nivel em Deducao!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_deducao) == true){
+                            lvl_deducao += 1;
+                            cout << nome << "subiu de nivel em Deducao!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;               
                 }
 
@@ -893,20 +1413,26 @@ class Elfo: public Jogador{
 
                     case 6: 
                         qtd_pontos -= 1;
-                        lvl_artesanato += 1;
-                        cout << nome << "subiu de nivel em Artesanato!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_artesanato) == true){
+                            lvl_artesanato += 1;
+                            cout << nome << "subiu de nivel em Artesanato!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;
 
                     case 7: 
                         qtd_pontos -= 1;
-                        lvl_arcos += 1;
-                        cout << nome << "subiu de nivel em Artilharia de Arcos!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_arcos) == true){
+                            lvl_arcos += 1;
+                            cout << nome << "subiu de nivel em Artilharia de Arcos!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break; 
 
                     case 8: 
                         qtd_pontos -= 1;
-                        lvl_sintonia_natureza += 1;
-                        cout << nome << "subiu de nivel em Sinfonia da Natureza!" << endl;
+                        if(verifica_aumenta_lvl_habilidade(lvl_sintonia_natureza) == true){
+                            lvl_sintonia_natureza += 1;
+                            cout << nome << "subiu de nivel em Sinfonia da Natureza!" << endl;
+                        }else{cout << "Voce ja esta no nivel maximo!" << endl;}
                         break;               
                 }
 
@@ -914,13 +1440,10 @@ class Elfo: public Jogador{
                 cout << nome << "Nao tem pontos suficientes para subir de nivel" << endl;
             }
         }
-
-    
 };
 
 
 int main(){
-
 
     return 0;
 
