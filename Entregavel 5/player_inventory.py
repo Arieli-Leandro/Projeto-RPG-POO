@@ -1,11 +1,16 @@
 #O método Fabric vai permitir q a gnt tenha um menu de criação de jogador e profissão
-#Se der implementar um gerenciador com interface pra fazer as ações do personagem (talvez as ações com um Singleton)
+# Não esquecer dps de fazer um gerenciador com interface pra fazer as tasks e tbm vai precisar de um Singleton :/ (-A)
 
 from abc import ABC, abstractmethod
 from pyfiglet import Figlet
 from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
+
+class ExcessaoNivelGeralInvalido(Exception):
+
+    def __str__(self):
+        return f"Valor de nível geral inválido!"
 
 class Profissao(ABC):
 
@@ -17,7 +22,17 @@ class Profissao(ABC):
         else:
             self._nivel_geral_profissao = 0
 
-    def _valida_atributo_construtor(self, valor):
+    #método setter
+    def setNivelGeral(self, valor):
+        if(valor < 0):
+            raise ExcessaoNivelGeralInvalido()
+        
+    #método getter
+    def getNivelGeral(self):
+        return self._nivel_geral_profissao
+
+    #método privado
+    def __valida_atributo_construtor(self, valor):
         retorno = False
 
         if valor > 0:
@@ -32,7 +47,8 @@ class Profissao(ABC):
 
         return
 
-    def verifica_aumenta_lvl_habilidade(self, valor):
+    #método privado tbbm
+    def __verifica_aumenta_lvl_habilidade(self, valor):
         retorno = True
 
         valor = valor + 1
@@ -48,28 +64,28 @@ class Profissao(ABC):
     def __del__(self):
         print("Profissao deletada")
 
-
+#fazer os getters e setters daqui tbbm
 class Mago(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_lancar_feitico=0, lvl_educacao=0, lvl_resistir_magia=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
-        if self._valida_atributo_construtor(lvl_criar_ritual) == True:
+        if self.__valida_atributo_construtor(lvl_criar_ritual) == True:
             self.__lvl_criar_ritual = lvl_criar_ritual
         else:
             self.__lvl_criar_ritual = 0
 
-        if self._valida_atributo_construtor(lvl_lancar_feitico) == True:
+        if self.__valida_atributo_construtor(lvl_lancar_feitico) == True:
             self.__lvl_lancar_feitico = lvl_lancar_feitico
         else:
             self.__lvl_lancar_feitico = 0
 
-        if self._valida_atributo_construtor(lvl_educacao) == True:
+        if self.__valida_atributo_construtor(lvl_educacao) == True:
             self.__lvl_educacao = lvl_educacao
         else:
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_resistir_magia) == True:
+        if self.__valida_atributo_construtor(lvl_resistir_magia) == True:
             self.__lvl_resistir_magia = lvl_resistir_magia
         else:
             self.__lvl_resistir_magia = 0
@@ -83,7 +99,7 @@ class Mago(Profissao):
         if self._qtd_pontos_profissao > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Criar Ritual")
                 print("2 - Upar Habilidade de: Educacao")
                 print("3 - Upar Habilidade de: Lancar Feitico")
@@ -98,7 +114,7 @@ class Mago(Profissao):
 
             if opcao == 1:  # Criar Ritual
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_criar_ritual) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_criar_ritual) == True:
                     self.__lvl_criar_ritual = self.__lvl_criar_ritual + 1
                     print("subiu de nivel em Criar Ritual!")
                 else:
@@ -106,7 +122,7 @@ class Mago(Profissao):
 
             elif opcao == 2:  # Educacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("subiu de nivel em Educacao!")
                 else:
@@ -114,7 +130,7 @@ class Mago(Profissao):
 
             elif opcao == 3:  # Lancar Feitico
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_lancar_feitico) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_lancar_feitico) == True:
                     self.__lvl_lancar_feitico = self.__lvl_lancar_feitico + 1
                     print("subiu de nivel em Lancar Feitico!")
                 else:
@@ -122,7 +138,7 @@ class Mago(Profissao):
 
             elif opcao == 4:  # Resistir Magia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_resistir_magia) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_resistir_magia) == True:
                     self.__lvl_resistir_magia = self.__lvl_resistir_magia + 1
                     print("subiu de nivel em Resistir a Magia!")
                 else:
@@ -131,6 +147,7 @@ class Mago(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
+#fazer os getters e setters daqui tbbm
 
 class Bardo(Profissao):
 
@@ -138,17 +155,17 @@ class Bardo(Profissao):
         super().__init__(nivel_geral)
 
         # private
-        if self._valida_atributo_construtor(lvl_etiqueta_social) == True:
+        if self.__valida_atributo_construtor(lvl_etiqueta_social) == True:
             self.__lvl_etiqueta_social = lvl_etiqueta_social
         else:
             self.__lvl_etiqueta_social = 0
 
-        if self._valida_atributo_construtor(lvl_ludibriar) == True:
+        if self.__valida_atributo_construtor(lvl_ludibriar) == True:
             self.__lvl_ludibriar = lvl_ludibriar
         else:
             self.__lvl_ludibriar = 0
 
-        if self._valida_atributo_construtor(lvl_sabedoria_das_ruas) == True:
+        if self.__valida_atributo_construtor(lvl_sabedoria_das_ruas) == True:
             self.__lvl_sabedoria_das_ruas = lvl_sabedoria_das_ruas
         else:
             self.__lvl_sabedoria_das_ruas = 0
@@ -162,7 +179,7 @@ class Bardo(Profissao):
         if self._qtd_pontos_profissao > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Etiqueta Social")
                 print("2 - Upar Habilidade de: Ludibriar")
                 print("3 - Upar Habilidade de: Sabedoria das Ruas")
@@ -176,7 +193,7 @@ class Bardo(Profissao):
 
             if opcao == 1:  # Etiqueta Social
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_etiqueta_social) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_etiqueta_social) == True:
                     self.__lvl_etiqueta_social = self.__lvl_etiqueta_social + 1
                     print("subiu de nivel em Etiqueta Social!")
                 else:
@@ -184,7 +201,7 @@ class Bardo(Profissao):
 
             elif opcao == 2:  # Ludibriar
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_ludibriar) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_ludibriar) == True:
                     self.__lvl_ludibriar = self.__lvl_ludibriar + 1
                     print("subiu de nivel em Ludibriar!")
                 else:
@@ -192,7 +209,7 @@ class Bardo(Profissao):
 
             elif opcao == 3:  # Sabedoria das Ruas
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_sabedoria_das_ruas) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_sabedoria_das_ruas) == True:
                     self.__lvl_sabedoria_das_ruas = self.__lvl_sabedoria_das_ruas + 1
                     print("subiu de nivel em Sabedoria das Ruas!")
                 else:
@@ -201,29 +218,29 @@ class Bardo(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Artesao(Profissao):
 
     def __init__(self, lvl_educacao=0, lvl_criacao=0, lvl_negociacao=0, lvl_fisico=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
         # private
-        if self._valida_atributo_construtor(lvl_educacao) == True:
+        if self.__valida_atributo_construtor(lvl_educacao) == True:
             self.__lvl_educacao = lvl_educacao
         else:
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_criacao) == True:
+        if self.__valida_atributo_construtor(lvl_criacao) == True:
             self.__lvl_criacao = lvl_criacao
         else:
             self.__lvl_criacao = 0
 
-        if self._valida_atributo_construtor(lvl_negociacao) == True:
+        if self.__valida_atributo_construtor(lvl_negociacao) == True:
             self.__lvl_negociacao = lvl_negociacao
         else:
             self.__lvl_negociacao = 0
 
-        if self._valida_atributo_construtor(lvl_fisico) == True:
+        if self.__valida_atributo_construtor(lvl_fisico) == True:
             self.__lvl_fisico = lvl_fisico
         else:
             self.__lvl_fisico = 0
@@ -237,7 +254,7 @@ class Artesao(Profissao):
         if self._qtd_pontos_profissao > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Educacao")
                 print("2 - Upar Habilidade de: Criacao")
                 print("3 - Upar Habilidade de: Negociacao")
@@ -252,7 +269,7 @@ class Artesao(Profissao):
 
             if opcao == 1:  # Educacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("subiu de nivel em Educacao!")
                 else:
@@ -260,7 +277,7 @@ class Artesao(Profissao):
 
             elif opcao == 2:  # Criacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_criacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_criacao) == True:
                     self.__lvl_criacao = self.__lvl_criacao + 1
                     print("subiu de nivel em Criacao!")
                 else:
@@ -268,7 +285,7 @@ class Artesao(Profissao):
 
             elif opcao == 3:  # Negociacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_negociacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_negociacao) == True:
                     self.__lvl_negociacao = self.__lvl_negociacao + 1
                     print("subiu de nivel em Negociacao!")
                 else:
@@ -276,7 +293,7 @@ class Artesao(Profissao):
 
             elif opcao == 4:  # Fisico
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_fisico) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_fisico) == True:
                     self.__lvl_fisico = self.__lvl_fisico + 1
                     print("subiu de nivel em Fisico!")
                 else:
@@ -285,28 +302,28 @@ class Artesao(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Criminoso(Profissao):
 
     def __init__(self, lvl_arrombar_fechaduras=0, lvl_falsificacao=0, lvl_atletismo=0, lvl_sabedoria_das_ruas=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
-        if self._valida_atributo_construtor(lvl_arrombar_fechaduras) == True:
+        if self.__valida_atributo_construtor(lvl_arrombar_fechaduras) == True:
             self.__lvl_arrombar_fechaduras = lvl_arrombar_fechaduras
         else:
             self.__lvl_arrombar_fechaduras = 0
 
-        if self._valida_atributo_construtor(lvl_falsificacao) == True:
+        if self.__valida_atributo_construtor(lvl_falsificacao) == True:
             self.__lvl_falsificacao = lvl_falsificacao
         else:
             self.__lvl_falsificacao = 0
 
-        if self._valida_atributo_construtor(lvl_atletismo) == True:
+        if self.__valida_atributo_construtor(lvl_atletismo) == True:
             self.__lvl_atletismo = lvl_atletismo
         else:
             self.__lvl_atletismo = 0
 
-        if self._valida_atributo_construtor(lvl_sabedoria_das_ruas) == True:
+        if self.__valida_atributo_construtor(lvl_sabedoria_das_ruas) == True:
             self.__lvl_sabedoria_das_ruas = lvl_sabedoria_das_ruas
         else:
             self.__lvl_sabedoria_das_ruas = 0
@@ -320,7 +337,7 @@ class Criminoso(Profissao):
         if self._qtd_pontos_profissao > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Arrombar Fechadura")
                 print("2 - Upar Habilidade de: Falsificacao")
                 print("3 - Upar Habilidade de: Atletismo")
@@ -335,7 +352,7 @@ class Criminoso(Profissao):
 
             if opcao == 1:  # Arrombar Fechadura
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_arrombar_fechaduras) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_arrombar_fechaduras) == True:
                     self.__lvl_arrombar_fechaduras = self.__lvl_arrombar_fechaduras + 1
                     print("subiu de nivel em Arrombar Fechaduras!")
                 else:
@@ -343,7 +360,7 @@ class Criminoso(Profissao):
 
             elif opcao == 2:  # Falsificacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_falsificacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_falsificacao) == True:
                     self.__lvl_falsificacao = self.__lvl_falsificacao + 1
                     print("subiu de nivel em Falsificacao!")
                 else:
@@ -351,7 +368,7 @@ class Criminoso(Profissao):
 
             elif opcao == 3:  # Atletismo
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_atletismo) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_atletismo) == True:
                     self.__lvl_atletismo = self.__lvl_atletismo + 1
                     print("subiu de nivel em Atletismo!")
                 else:
@@ -359,7 +376,7 @@ class Criminoso(Profissao):
 
             elif opcao == 4:  # Sabedoria das Ruas
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_sabedoria_das_ruas) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_sabedoria_das_ruas) == True:
                     self.__lvl_sabedoria_das_ruas = self.__lvl_sabedoria_das_ruas + 1
                     print("subiu de nivel em Sabedoria das Ruas!")
                 else:
@@ -368,28 +385,28 @@ class Criminoso(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Doutor(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_coragem=0, lvl_alquimia=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
-        if self._valida_atributo_construtor(lvl_carisma) == True:
+        if self.__valida_atributo_construtor(lvl_carisma) == True:
             self.__lvl_carisma = lvl_carisma
         else:
             self.__lvl_carisma = 0
 
-        if self._valida_atributo_construtor(lvl_educacao) == True:
+        if self.__valida_atributo_construtor(lvl_educacao) == True:
             self.__lvl_educacao = lvl_educacao
         else:
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_coragem) == True:
+        if self.__valida_atributo_construtor(lvl_coragem) == True:
             self.__lvl_coragem = lvl_coragem
         else:
             self.__lvl_coragem = 0
 
-        if self._valida_atributo_construtor(lvl_alquimia) == True:
+        if self.__valida_atributo_construtor(lvl_alquimia) == True:
             self.__lvl_alquimia = lvl_alquimia
         else:
             self.__lvl_alquimia = 0
@@ -402,8 +419,8 @@ class Doutor(Profissao):
 
         if self._qtd_pontos_profissao > 0:
 
-            while True:
-
+            while True: 
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Educacao")
                 print("2 - Upar Habilidade de: Coragem")
                 print("3 - Upar Habilidade de: Alquimia")
@@ -417,7 +434,7 @@ class Doutor(Profissao):
 
             if opcao == 1:  # Educacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("subiu de nivel em Educacao!")
                 else:
@@ -425,7 +442,7 @@ class Doutor(Profissao):
 
             elif opcao == 2:  # Coragem
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_coragem) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_coragem) == True:
                     self.__lvl_coragem = self.__lvl_coragem + 1
                     print("subiu de nivel em Coragem!")
                 else:
@@ -433,7 +450,7 @@ class Doutor(Profissao):
 
             elif opcao == 3:  # Alquimia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_alquimia) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_alquimia) == True:
                     self.__lvl_alquimia = self.__lvl_alquimia + 1
                     print("subiu de nivel em Alquimia!")
                 else:
@@ -442,29 +459,29 @@ class Doutor(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Cavaleiro(Profissao):
 
     def __init__(self, lvl_coragem=0, lvl_intimidacao=0, lvl_sobrevivencia=0, lvl_esquivar=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
         # private
-        if self._valida_atributo_construtor(lvl_coragem) == True:
+        if self.__valida_atributo_construtor(lvl_coragem) == True:
             self.__lvl_coragem = lvl_coragem
         else:
             self.__lvl_coragem = 0
 
-        if self._valida_atributo_construtor(lvl_intimidacao) == True:
+        if self.__valida_atributo_construtor(lvl_intimidacao) == True:
             self.__lvl_intimidacao = lvl_intimidacao
         else:
             self.__lvl_intimidacao = 0
 
-        if self._valida_atributo_construtor(lvl_sobrevivencia) == True:
+        if self.__valida_atributo_construtor(lvl_sobrevivencia) == True:
             self.__lvl_sobrevivencia = lvl_sobrevivencia
         else:
             self.__lvl_sobrevivencia = 0
 
-        if self._valida_atributo_construtor(lvl_esquivar) == True:
+        if self.__valida_atributo_construtor(lvl_esquivar) == True:
             self.__lvl_esquivar = lvl_esquivar
         else:
             self.__lvl_esquivar = 0
@@ -478,7 +495,7 @@ class Cavaleiro(Profissao):
         if self._qtd_pontos_profissao > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Coragem")
                 print("2 - Upar Habilidade de: Intimidacao")
                 print("3 - Upar Habilidade de: Sobrevivencia")
@@ -493,7 +510,7 @@ class Cavaleiro(Profissao):
 
             if opcao == 1:  # Coragem
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_coragem) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_coragem) == True:
                     self.__lvl_coragem = self.__lvl_coragem + 1
                     print("subiu de nivel em Coragem!")
                 else:
@@ -501,7 +518,7 @@ class Cavaleiro(Profissao):
 
             elif opcao == 2:  # Intimidacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_intimidacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_intimidacao) == True:
                     self.__lvl_intimidacao = self.__lvl_intimidacao + 1
                     print("subiu de nivel em Intimidacao!")
                 else:
@@ -509,7 +526,7 @@ class Cavaleiro(Profissao):
 
             elif opcao == 3:  # Sobrevivencia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_sobrevivencia) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_sobrevivencia) == True:
                     self.__lvl_sobrevivencia = self.__lvl_sobrevivencia + 1
                     print("subiu de nivel em Sobrevivencia!")
                 else:
@@ -517,7 +534,7 @@ class Cavaleiro(Profissao):
 
             elif opcao == 4:  # Esquivar
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_esquivar) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_esquivar) == True:
                     self.__lvl_esquivar = self.__lvl_esquivar + 1
                     print("subiu de nivel em Esquivar!")
                 else:
@@ -526,29 +543,29 @@ class Cavaleiro(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Comerciante(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_negocios=0, lvl_persuasao=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
         # private
-        if self._valida_atributo_construtor(lvl_carisma) == True:
+        if self.__valida_atributo_construtor(lvl_carisma) == True:
             self.__lvl_carisma = lvl_carisma
         else:
             self.__lvl_carisma = 0
 
-        if self._valida_atributo_construtor(lvl_educacao) == True:
+        if self.__valida_atributo_construtor(lvl_educacao) == True:
             self.__lvl_educacao = lvl_educacao
         else:
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_negocios) == True:
+        if self.__valida_atributo_construtor(lvl_negocios) == True:
             self.__lvl_negocios = lvl_negocios
         else:
             self.__lvl_negocios = 0
 
-        if self._valida_atributo_construtor(lvl_persuasao) == True:
+        if self.__valida_atributo_construtor(lvl_persuasao) == True:
             self.__lvl_persuasao = lvl_persuasao
         else:
             self.__lvl_persuasao = 0
@@ -562,7 +579,7 @@ class Comerciante(Profissao):
         if self._qtd_pontos_profissao > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Carisma")
                 print("2 - Upar Habilidade de: Educacao")
                 print("3 - Upar Habilidade de: Negocios")
@@ -577,7 +594,7 @@ class Comerciante(Profissao):
 
             if opcao == 1:  # Carisma
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_carisma) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_carisma) == True:
                     self.__lvl_carisma = self.__lvl_carisma + 1
                     print("subiu de nivel em Carisma!")
                 else:
@@ -585,7 +602,7 @@ class Comerciante(Profissao):
 
             elif opcao == 2:  # Educacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_educacao) == True:
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("subiu de nivel em Educacao!")
                 else:
@@ -593,7 +610,7 @@ class Comerciante(Profissao):
 
             elif opcao == 3:  # Negocios
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_negocios) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_negocios) == True:
                     self.__lvl_negocios = self.__lvl_negocios + 1
                     print("subiu de nivel em Negocios!")
                 else:
@@ -601,7 +618,7 @@ class Comerciante(Profissao):
 
             elif opcao == 4:  # Persuasao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_persuasao) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_persuasao) == True:
                     self.__lvl_persuasao = self.__lvl_persuasao + 1
                     print("subiu de nivel em Persuasao!")
                 else:
@@ -610,29 +627,29 @@ class Comerciante(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Sacerdote(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_coragem=0, lvl_ensinar=0, lvl_lancar_feitico=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
         # private
-        if self._valida_atributo_construtor(lvl_criar_ritual) == True:
+        if self.__valida_atributo_construtor(lvl_criar_ritual) == True:
             self.__lvl_criar_ritual = lvl_criar_ritual
         else:
             self.__lvl_criar_ritual = 0
 
-        if self._valida_atributo_construtor(lvl_coragem) == True:
+        if self.__valida_atributo_construtor(lvl_coragem) == True:
             self.__lvl_coragem = lvl_coragem
         else:
             self.__lvl_coragem = 0
 
-        if self._valida_atributo_construtor(lvl_ensinar) == True:
+        if self.__valida_atributo_construtor(lvl_ensinar) == True:
             self.__lvl_ensinar = lvl_ensinar
         else:
             self.__lvl_ensinar = 0
 
-        if self._valida_atributo_construtor(lvl_lancar_feitico) == True:
+        if self.__valida_atributo_construtor(lvl_lancar_feitico) == True:
             self.__lvl_lancar_feitico = lvl_lancar_feitico
         else:
             self.__lvl_lancar_feitico = 0
@@ -646,8 +663,8 @@ class Sacerdote(Profissao):
 
         if self._qtd_pontos_profissao > 0:
 
-            while True:
-
+            while True: 
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Criar Ritual")
                 print("2 - Upar Habilidade de: Coragem")
                 print("3 - Upar Habilidade de: Ensinar")
@@ -662,7 +679,7 @@ class Sacerdote(Profissao):
 
             if opcao == 1:  # Criar Ritual
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_criar_ritual) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_criar_ritual) == True:
                     self.__lvl_criar_ritual = self.__lvl_criar_ritual + 1
                     print("subiu de nivel em Criar Ritual!")
                 else:
@@ -670,7 +687,7 @@ class Sacerdote(Profissao):
 
             elif opcao == 2:  # Coragem
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_coragem) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_coragem) == True:
                     self.__lvl_coragem = self.__lvl_coragem + 1
                     print("subiu de nivel em Coragem!")
                 else:
@@ -678,7 +695,7 @@ class Sacerdote(Profissao):
 
             elif opcao == 3:  # Ensinar
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_ensinar) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_ensinar) == True:
                     self.__lvl_ensinar = self.__lvl_ensinar + 1
                     print("subiu de nivel em Ensinar!")
                 else:
@@ -686,7 +703,7 @@ class Sacerdote(Profissao):
 
             elif opcao == 4:  # Lancar Feitico
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_lancar_feitico) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_lancar_feitico) == True:
                     self.__lvl_lancar_feitico = self.__lvl_lancar_feitico + 1
                     print("subiu de nivel em Lancar Feitico!")
                 else:
@@ -695,19 +712,19 @@ class Sacerdote(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Desempregado(Profissao):
 
     def __init__(self, lvl_sobrevivencia=0, lvl_consciencia=0, nivel_geral=0):
         super().__init__(nivel_geral)
 
         # private
-        if self._valida_atributo_construtor(lvl_sobrevivencia) == True:
+        if self.__valida_atributo_construtor(lvl_sobrevivencia) == True:
             self.__lvl_sobrevivencia = lvl_sobrevivencia
         else:
             self.__lvl_sobrevivencia = 0
 
-        if self._valida_atributo_construtor(lvl_consciencia) == True:
+        if self.__valida_atributo_construtor(lvl_consciencia) == True:
             self.__lvl_consciencia = lvl_consciencia
         else:
             self.__lvl_consciencia = 0
@@ -722,7 +739,7 @@ class Desempregado(Profissao):
         if self._qtd_pontos_profissao > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Sobrevivencia")
                 print("2 - Upar Habilidade de: Consciencia")
                 print("Digite uma opcao: ")
@@ -735,7 +752,7 @@ class Desempregado(Profissao):
 
             if opcao == 1:  # Sobrevivencia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_sobrevivencia) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_sobrevivencia) == True:
                     self.__lvl_sobrevivencia = self.__lvl_sobrevivencia + 1
                     print("subiu de nivel em Sobrevivencia!")
                 else:
@@ -743,7 +760,7 @@ class Desempregado(Profissao):
 
             elif opcao == 2:  # Consciencia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
-                if self.verifica_aumenta_lvl_habilidade(self.__lvl_consciencia) == True:
+                if self.__verifica_aumenta_lvl_habilidade(self.__lvl_consciencia) == True:
                     self.__lvl_consciencia = self.__lvl_consciencia + 1
                     print("subiu de nivel em Consciencia!")
                 else:
@@ -752,7 +769,7 @@ class Desempregado(Profissao):
         else:
             print("Voce nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Jogador(ABC):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0):
@@ -828,7 +845,7 @@ class Jogador(ABC):
         if self._qtd_pontos > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("1 - Upar Habilidade de: Aposta")
                 print("2 - Upar Habilidade de: Brigar")
                 print("3 - Upar Habilidade de: Coragem")
@@ -892,7 +909,7 @@ class Jogador(ABC):
     def __del__(self):
         print("Removendo os dados do jogador: " + self._nome)
 
-
+#fazer os getters e setters daqui tbbm
 class Humano(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
@@ -930,7 +947,7 @@ class Humano(Jogador):
         if self._qtd_pontos > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("6 - Upar Habilidade de: Seducao")
                 print("7 - Upar Habilidade de: Persuasao")
                 print("8 - Upar Habilidade de: Teimosia")
@@ -969,7 +986,7 @@ class Humano(Jogador):
         else:
             print(self._nome + " nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Bruxo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
@@ -995,7 +1012,7 @@ class Bruxo(Jogador):
         if self._qtd_pontos > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("6 - Upar Habilidade de: Reflexos Relampagos")
                 print("Digite uma opcao: ")
                 opcao = int(input())
@@ -1016,7 +1033,7 @@ class Bruxo(Jogador):
         else:
             print(self._nome + " nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Anao(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, imunidade=0, lvl_armadura=0, lvl_deducao=0):
@@ -1050,7 +1067,7 @@ class Anao(Jogador):
         if self._qtd_pontos > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("6 - Upar Habilidade de: Armaduras")
                 print("7 - Upar Habilidade de: Deducao")
                 print("Digite uma opcao: ")
@@ -1080,7 +1097,7 @@ class Anao(Jogador):
         else:
             print(self._nome + " nao tem pontos suficientes para subir de nivel")
 
-
+#fazer os getters e setters daqui tbbm
 class Elfo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, imunidade=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
@@ -1118,7 +1135,7 @@ class Elfo(Jogador):
         if self._qtd_pontos > 0:
 
             while True:
-
+                #Colocar o treco do console aqui tbm
                 print("6 - Upar Habilidade de: Artesanato")
                 print("7 - Upar Habilidade de: Artilharia de Arcos")
                 print("8 - Upar Habilidade de: Sintonia da Natureza")
@@ -1185,7 +1202,6 @@ class ProfissaoFactory:
 
         #A ideia é q em profissão o jogador fazendo as tasks ele aumente de nível para upar
         #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric (mesmo q na de cima)
-
 
         profissao = None
 
@@ -1321,5 +1337,5 @@ if __name__ == "__main__":
 
     print("\nPersonagem criado com sucesso!")
     print("Nome:", jogador._nome)
-    print("Raça:", type(jogador).__name__)
-    print("Profissão:", type(jogador._profissao_jogador).__name__)
+    print("Raça:", type(jogador).__name__) #trocar isso dps por um getter plmds -A
+    print("Profissão:", type(jogador._profissao_jogador).__name__) #trocar isso dps por um getter plmds -A
