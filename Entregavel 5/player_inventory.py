@@ -1161,11 +1161,16 @@ class JogadorFactory:
         #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric
 
         jogador = None
-        #Trocar por um match case
         
         match tipo:
             case 1: #Humano
-                pass
+                jogador = Humano(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade, lvl_seducao, lvl_persuasao, lvl_teimosia)
+            case 2: #Bruxo
+                jogador = Bruxo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, lvl_reflexos_relampagos)
+            case 3: #Anão
+                jogador = Anao(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade, lvl_armadura, lvl_deducao)
+            case 4: #Elfo
+                jogador = Elfo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade, lvl_artesanato, lvl_arcos, lvl_sintonia_natureza)
 
         return jogador
     
@@ -1186,6 +1191,20 @@ class ProfissaoFactory:
                 #profissao = Mago(passo os params aquii)
                 pass
             case 2: #Bardo
+                pass
+            case 3: #Artesao
+                pass
+            case 4: #Criminoso
+                pass
+            case 5: #Doutor
+                pass
+            case 6: #Cavaleiro
+                pass
+            case 7: #Comerciante
+                pass
+            case 8: #Sacerdote
+                pass
+            case 9: #Desempregado
                 pass
 
         return profissao
