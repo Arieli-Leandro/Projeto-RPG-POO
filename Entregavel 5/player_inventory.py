@@ -1159,7 +1159,6 @@ class JogadorFactory:
     def criar_jogador(tipo, nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0, lvl_reflexos_relampagos=0, lvl_armadura=0, lvl_deducao=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
 
         #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric
-
         jogador = None
         
         match tipo:
@@ -1177,38 +1176,40 @@ class JogadorFactory:
 class ProfissaoFactory:
 
     @staticmethod
-    def criar_profissao(tipo, nivel_geral, lvl_carisma=0, lvl_educacao=0, lvl_negocios=0, lvl_persuasao=0, lvl_coragem=0, lvl_intimidacao=0, lvl_sobrevivencia=0, lvl_esquivar=0, lvl_criar_ritual=0, lvl_ensinar=0, lvl_lancar_feitico=0, lvl_armadura=0, lvl_deducao=0, lvl_sobrevivencia_desempregado=0, lvl_consciencia_desempregado=0):
+    def criar_profissao(tipo, nivel_geral=0):
 
-        #Faz a verificação na main antes de chamar o método Fabric
+        #A ideia é q em profissão o jogador fazendo as tasks ele aumente de nível para upar
+        #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric (mesmo q na de cima)
+
 
         profissao = None
-
-        #Estava pensando em fazer um match case para isso
 
         match tipo:
 
             case 1: #Mago
-                #profissao = Mago(passo os params aquii)
-                pass
+                profissao = Mago(nivel_geral=nivel_geral)
             case 2: #Bardo
-                pass
+                profissao = Bardo(nivel_geral=nivel_geral)
             case 3: #Artesao
-                pass
+                profissao = Artesao(nivel_geral=nivel_geral)
             case 4: #Criminoso
-                pass
+                profissao = Criminoso(nivel_geral=nivel_geral)
             case 5: #Doutor
-                pass
+                profissao = Doutor(nivel_geral=nivel_geral)
             case 6: #Cavaleiro
-                pass
+                profissao = Cavaleiro(nivel_geral=nivel_geral)
             case 7: #Comerciante
-                pass
+                profissao = Comerciante(nivel_geral=nivel_geral)
             case 8: #Sacerdote
-                pass
+                profissao = Sacerdote(nivel_geral=nivel_geral)
             case 9: #Desempregado
-                pass
+                profissao = Desempregado(nivel_geral=nivel_geral)
 
         return profissao
 
+
+# -> Classe com interface para realizar as tasks
+# -> ? Gerenciador ? -> A pensar
 
 if __name__ == "__main__":
 
