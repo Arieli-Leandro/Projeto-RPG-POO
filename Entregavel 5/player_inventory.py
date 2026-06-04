@@ -1,6 +1,11 @@
 #O método Fabric vai permitir q a gnt tenha um menu de criação de jogador e profissão
+#Se der implementar um gerenciador com interface pra fazer as ações do personagem (talvez as ações com um Singleton)
 
 from abc import ABC, abstractmethod
+from pyfiglet import Figlet
+from rich.console import Console
+from rich.panel import Panel
+from rich.align import Align
 
 class Profissao(ABC):
 
@@ -1211,15 +1216,110 @@ class ProfissaoFactory:
 # -> Classe com interface para realizar as tasks
 # -> ? Gerenciador ? -> A pensar
 
+class ExcessaoTipoOpcaoInvalido(Exception):
+
+    def __str__(self):
+        return f"Digite um número inteiro!"
+    
+class ExcessaoOpcaoInvalida(Exception):
+
+    def __str__(self):
+        return f"Digite uma opcao válida!"
+
+def menu_jogador():
+
+    console = Console()
+
+    while True:
+
+        console.print(
+            Panel(
+                Align.center(
+                    "1 - Humano \n"
+                    "2 - Bruxo \n"
+                    "3 - Anão \n"
+                    "4 - Elfo"
+                ),                
+                title= "Escolha a raça do seu personagem"
+                
+            )
+        )
+
+        try:
+            opcao = int(input("Digite sua opção: "))
+        except ValueError:
+            raise ExcessaoTipoOpcaoInvalido
+
+        if(opcao >= 1 and opcao <= 4):
+            break
+        else:
+            raise ExcessaoOpcaoInvalida()
+
+    return opcao
+
+def menu_profissao():
+
+    console = Console()
+
+    while True:
+
+        console.print(
+            Panel(
+                Align.center(
+                   "1 - Ser um Mago \n"
+                    "2 - Ser um Bardo \n"
+                    "3 - Ser um Artesão \n"
+                    "4 - Ser um Criminoso \n"
+                    "5 - Ser um Doutor \n"
+                    "6 - Ser um Cavaleiro \n"
+                    "7 - Ser um Comerciante \n"
+                    "8 - Ser um Sacerdote \n"
+                    "9 - Ser um Desempregado"
+                ),                
+                title= "Escolha o que o seu personagem vai ser"
+                
+            )
+        )        
+
+        try:
+            opcao = int(input("Digite sua opção: "))
+        except ValueError:
+            raise ExcessaoTipoOpcaoInvalido()
+
+        if(opcao >= 1 and opcao <= 9):
+            break
+        else:
+            raise ExcessaoOpcaoInvalida()
+        
+    return opcao
+
 if __name__ == "__main__":
 
-    humano = Humano("Aragorn", 100, 5, 3, 2, 4, 3, 5, 2, 4, 3, 1)
-    bruxo = Bruxo("Gandalf", 80, 13, 5, 1, 3, 7, 9, 6)
-    anao = Anao("Gimli", 120, 8, 6, 1, 7, 5, 2, 3, 5, 4)
-    elfo = Elfo("Legolas", 90, 10, 4, 3, 3, 6, 7, 2, 5, 8, 4)
+    console = Console()
 
-    jogadores = [humano, bruxo, anao, elfo]
+    fonte = Figlet(font="starwars")
 
-    print("=== personagens criados ===")
-    for j in jogadores:
-        print("nome:", j._nome, "| hp:", j._hp, "| nivel:", j._nivel_geral)
+    print(fonte.renderText("RPG"))
+    print(fonte.renderText("The Witcher"))
+
+    console.print(
+        Panel(
+            Align.center("Digite o nome do personagem:")
+        )
+    )
+    nome = input("")
+
+    opcao_jogador = menu_jogador()
+
+    jogador = JogadorFactory.criar_jogador(opcao_jogador,nome,100,0,0,0,0,0,0)
+
+    opcao_profissao = menu_profissao()
+
+    profissao = ProfissaoFactory.criar_profissao(opcao_profissao)
+
+    jogador._profissao_jogador = profissao
+
+    print("\nPersonagem criado com sucesso!")
+    print("Nome:", jogador._nome)
+    print("Raça:", type(jogador).__name__)
+    print("Profissão:", type(jogador._profissao_jogador).__name__)
