@@ -133,9 +133,7 @@ class Mago(Profissao):
                             "2 - Upar Habilidade de: Educação \n"
                             "3 - Upar Habilidade de: Lancar Feitico \n"
                             "4 - Upar Habilidade de: Resistir Magia"
-                        )),
-                        title="❇ Subir de LVL ❇" 
-                        )
+                        )),title="❇ Subir de LVL: Skill Profissão ❇")
                 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -220,8 +218,7 @@ class Bardo(Profissao):
                     "1 - Upar Habilidade de: Etiqueta Social \n"
                     "2 - Upar Habilidade de: Ludibriar \n"
                     "3 - Upar Habilidade de: Sabedoria das Ruas"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -304,8 +301,7 @@ class Artesao(Profissao):
                     "2 - Upar Habilidade de: Criação \n"
                     "3 - Upar Habilidade de: Negociação \n"
                     "4 - Upar Habilidade de: Físico"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -396,8 +392,8 @@ class Criminoso(Profissao):
                     "2 - Upar Habilidade de: Falsificacao \n"
                     "3 - Upar Habilidade de: Atletismo \n"
                     "4 - Upar Habilidade de: Sabedoria das Ruas"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
+
                 try:
                     opcao = int(input("Digite uma opção: "))
                 except ValueError:
@@ -484,8 +480,8 @@ class Doutor(Profissao):
                     "1 - Upar Habilidade de: Educação \n"
                     "2 - Upar Habilidade de: Coragem \n"
                     "3 - Upar Habilidade de: Alquimia \n"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
+
                 try:
                     opcao = int(input("Digite uma opção: "))
                 except ValueError:
@@ -567,8 +563,8 @@ class Cavaleiro(Profissao):
                     "2 - Upar Habilidade de: Intimidação \n"
                     "3 - Upar Habilidade de: Sobrevivência \n"
                     "4 - Upar Habilidade de: Esquivar"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
+
                 try:
                     opcao = int(input("Digite uma opção: "))
                 except ValueError:
@@ -657,8 +653,7 @@ class Comerciante(Profissao):
                     "2 - Upar Habilidade de: Educação \n"
                     "3 - Upar Habilidade de: Negócios \n"
                     "4 - Upar Habilidade de: Persuasão"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -749,8 +744,7 @@ class Sacerdote(Profissao):
                     "2 - Upar Habilidade de: Coragem \n"
                     "3 - Upar Habilidade de: Ensinar \n"
                     "4 - Upar Habilidade de:  Lancar Feitiço"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -831,8 +825,7 @@ class Desempregado(Profissao):
                     "2 - Upar Habilidade de: Consciência \n"
                     "3 - Upar Habilidade de: Ensinar \n"
                     "4 - Upar Habilidade de:  Lancar Feitiço"
-                )),
-                title="❇ Subir de LVL ❇")
+                )),title="❇ Subir de LVL: Skill Profissão ❇")
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -947,15 +940,16 @@ class Jogador(ABC):
                     "2 - Upar Habilidade de: Brigar \n"
                     "3 - Upar Habilidade de: Coragem \n"
                     "4 - Upar Habilidade de: Forca \n"
-                    "5 - Upar Habilidade de: Inteligencia"
-                ),title="❇ Subir de LVL ❇"))
+                    "5 - Upar Habilidade de: Inteligencia \n"
+                    "6 - Não Upar Habilidade Básica"
+                ),title="❇ Subir de LVL: Habilidades Básicas ❇"))
                 
                 try:
                     opcao = int(input("Digite uma opção: "))
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
             
-                if opcao >= 1 and opcao <= 5:
+                if opcao >= 1 and opcao <= 6:
                     break
                 else:
                     raise ExcessaoTipoOpcaoInvalido()
@@ -999,9 +993,12 @@ class Jogador(ABC):
                     print(self._nome + " Subiu de nível em Inteligência!")
                 else:
                     raise ExcessaoNivelMaximo()
-
+            elif opcao == 6:  # Não upar habilidade basica
+                pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
+        
+        return
 
     @abstractmethod
     def inicializa_jogador(self):
@@ -1052,22 +1049,23 @@ class Humano(Jogador):
             while True:
 
                 console.print(Panel(Align.center(
-                    "6 - Upar Habilidade de: Sedução"
-                    "7 - Upar Habilidade de: Persuasão"
-                    "8 - Upar Habilidade de: Teimosia"
-                )))
+                    "7 - Upar Habilidade de: Sedução \n"
+                    "8 - Upar Habilidade de: Persuasão \n"
+                    "9 - Upar Habilidade de: Teimosia \n"
+                    "10 - Não Upar Habilidade Específica"
+                ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
 
-                if opcao >= 6 and opcao <= 8:
+                if opcao >= 7 and opcao <= 10:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 6:
+            if opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_seducao) == True:
                     self.__lvl_seducao = self.__lvl_seducao + 1
@@ -1075,7 +1073,7 @@ class Humano(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 7:
+            elif opcao == 8:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_persuasao) == True:
                     self.__lvl_persuasao = self.__lvl_persuasao + 1
@@ -1083,15 +1081,19 @@ class Humano(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 8:
+            elif opcao == 9:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_teimosia) == True:
                     self.__lvl_teimosia = self.__lvl_teimosia + 1
                     print(self._nome + " Subiu de nível em Teimosia!")
                 else:
                     raise ExcessaoNivelMaximo()
+            elif opcao == 10:
+                pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
+        
+        return
 
 #fazer os getters e setters daqui tbbm
 class Bruxo(Jogador):
@@ -1123,26 +1125,30 @@ class Bruxo(Jogador):
             while True:
 
                 console.print(Panel(Align.center(
-                    "6 - Upar Habilidade de: Reflexos Relâmpagos"
-                )))
+                    "7 - Upar Habilidade de: Reflexos Relâmpagos \n"
+                    "8 - Não Upar Habilidade Específica"
+                ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
 
-                if opcao == 6:
+                if opcao >= 7 and opcao <= 8:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 6:
+            if opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_reflexos_relampagos) == True:
                     self.__lvl_reflexos_relampagos = self.__lvl_reflexos_relampagos + 1
                     print(self._nome + " Subiu de nível em Reflexos Relâmpagos!")
                 else:
                     raise ExcessaoNivelMaximo()
+            elif opcao == 8:
+                pass
+                
         else:
             ExcessaoPontosInsuficientesSubirNivel()
 
@@ -1183,21 +1189,22 @@ class Anao(Jogador):
 
             while True:
                 console.print(Panel(Align.center(
-                    "6 - Upar Habilidade de: Armaduras \n"
-                    "7 - Upar Habilidade de: Dedução"
-                )))
+                    "7 - Upar Habilidade de: Armaduras \n"
+                    "8 - Upar Habilidade de: Dedução \n"
+                    "9 - Não Upar Habilidade Específica"
+                ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
 
-                if opcao >= 6 and opcao <= 7:
+                if opcao >= 7 and opcao <= 9:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 6:
+            if opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_armadura) == True:
                     self.__lvl_armadura = self.__lvl_armadura + 1
@@ -1205,15 +1212,18 @@ class Anao(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 7:
+            elif opcao == 8:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_deducao) == True:
                     self.__lvl_deducao = self.__lvl_deducao + 1
                     print(self._nome + " Subiu de nível em Dedução!")
                 else:
                     raise ExcessaoNivelMaximo()
+            elif opcao == 9:
+                pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
+        return
 
 #fazer os getters e setters daqui tbbm
 class Elfo(Jogador):
@@ -1258,10 +1268,11 @@ class Elfo(Jogador):
 
             while True:
                 console.print(Panel(Align.center(
-                    "6 - Upar Habilidade de: Artesanato \n"
-                    "7 - Upar Habilidade de: Artilharia de Arcos \n"
-                    "8 - Upar Habilidade de: Sintonia da Natureza"
-                )))
+                    "7 - Upar Habilidade de: Artesanato \n"
+                    "8 - Upar Habilidade de: Artilharia de Arcos \n"
+                    "9 - Upar Habilidade de: Sintonia da Natureza \n"
+                    "10 - Não Upar Habilidade Específica"
+                ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -1269,12 +1280,12 @@ class Elfo(Jogador):
                     raise ExcessaoTipoOpcaoInvalido()
                 
 
-                if opcao >= 6 and opcao <= 8:
+                if opcao >= 7 and opcao <= 10:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 6:
+            if opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_artesanato) == True:
                     self.__lvl_artesanato = self.__lvl_artesanato + 1
@@ -1282,7 +1293,7 @@ class Elfo(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 7:
+            elif opcao == 8:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_arcos) == True:
                     self.__lvl_arcos = self.__lvl_arcos + 1
@@ -1290,15 +1301,18 @@ class Elfo(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 8:
+            elif opcao == 9:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_sintonia_natureza) == True:
                     self.__lvl_sintonia_natureza = self.__lvl_sintonia_natureza + 1
                     print(self._nome + " Subiu de nível em Sintonia da Natureza!")
                 else:
                     raise ExcessaoNivelMaximo()
+            elif opcao == 10:
+                pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
+        return
 
 class JogadorFactory:
 
