@@ -3,6 +3,10 @@
 
 #Fazer uma função para tocar música com o Pyfiglet
 
+#Entregável em Python Feito por Arieli (-A)
+
+#Nas profissões mandar o atributo verificador de atributo antes de fazer a igualação(esqueci o nome)
+
 from abc import ABC, abstractmethod
 from pyfiglet import Figlet
 from rich.console import Console
@@ -12,27 +16,22 @@ from rich.align import Align
 # =------ Excessões ------=
 
 class ExcessaoNivelGeralInvalido(Exception):
-
     def __str__(self):
         return f"Valor de nível geral inválido!"
     
 class ExcessaoNivelMaximo(Exception):
-
     def __str__(self):
         return f"Seu personagem já está com essa skill no nível Máximo!"
     
 class ExcessaoPontosInsuficientesSubirNivel(Exception):
-
     def __str__(self):
         return f"Seu personagem não tem pontos suficientes para subir de nível!"
     
 class ExcessaoTipoOpcaoInvalido(Exception):
-
     def __str__(self):
         return f"Digite um número inteiro!"
     
 class ExcessaoOpcaoInvalida(Exception):
-
     def __str__(self):
         return f"Digite uma opcao válida!"
 
@@ -55,7 +54,6 @@ class Profissao(ABC):
     def getNivelGeral(self):
         return self._nivel_geral_profissao
 
-    #método privado
     def _valida_atributo_construtor(self, valor):
         retorno = False
 
@@ -71,7 +69,6 @@ class Profissao(ABC):
 
         return
 
-    #método privado tbbm
     def _verifica_aumenta_lvl_habilidade(self, valor):
         retorno = True
 
@@ -88,32 +85,62 @@ class Profissao(ABC):
     def __del__(self):
         print("Profissao deletada")
 
-#fazer os getters e setters daqui tbbm
 class Mago(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_lancar_feitico=0, lvl_educacao=0, lvl_resistir_magia=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlCriarRitual(lvl_criar_ritual)
+        self.setLvlLancarFeitico(lvl_lancar_feitico)
+        self.setLvlEducacao(lvl_educacao)
+        self.setLvlResistirMagia(lvl_resistir_magia)
 
-        if self._valida_atributo_construtor(lvl_criar_ritual) == True:
-            self.__lvl_criar_ritual = lvl_criar_ritual
+    #Métodos getters
+    def getLvlCriarRitual(self):
+        return self.__lvl_criar_ritual
+    
+    def getLvlLancarFeitico(self):
+        return self.__lvl_lancar_feitico
+    
+    def getLvlEducacao(self):
+        return self.__lvl_educacao
+    
+    def getLvlResistirMagia(self):
+        return self.__lvl_resistir_magia
+
+    #Métodos setters
+    def setLvlCriarRitual(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_criar_ritual = valor
         else:
             self.__lvl_criar_ritual = 0
-
-        if self._valida_atributo_construtor(lvl_lancar_feitico) == True:
-            self.__lvl_lancar_feitico = lvl_lancar_feitico
-        else:
+            
+        return
+    
+    def setLvlLancarFeitico(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_lancar_feitico = valor
+        else: 
             self.__lvl_lancar_feitico = 0
 
-        if self._valida_atributo_construtor(lvl_educacao) == True:
-            self.__lvl_educacao = lvl_educacao
+        return
+    
+    def setLvlEducacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_educacao = valor
         else:
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_resistir_magia) == True:
-            self.__lvl_resistir_magia = lvl_resistir_magia
+        return
+    
+    def setLvlResistirMagia(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_resistir_magia = valor
         else:
             self.__lvl_resistir_magia = 0
 
+        return    
+
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -185,23 +212,46 @@ class Bardo(Profissao):
 
     def __init__(self, lvl_etiqueta_social=0, lvl_ludibriar=0, lvl_sabedoria_das_ruas=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlEtiquetaSocial(lvl_etiqueta_social)
+        self.setLvlLudibriar(lvl_ludibriar)
+        self.setLvlSabedoriaDasRuas(lvl_sabedoria_das_ruas)
 
-        # private
-        if self._valida_atributo_construtor(lvl_etiqueta_social) == True:
-            self.__lvl_etiqueta_social = lvl_etiqueta_social
+    #Métodos getters
+    def getLvlEtiquetaSocial(self):
+        return self.__lvl_etiqueta_social
+    
+    def getLvlLudibriar(self):
+        return self.__lvl_ludibriar
+    
+    def getLvlSabedoriaDasRuas(self):
+        return self.__lvl_sabedoria_das_ruas
+
+    #Métodos setters
+    def setLvlEtiquetaSocial(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_etiqueta_social = valor
         else:
             self.__lvl_etiqueta_social = 0
 
-        if self._valida_atributo_construtor(lvl_ludibriar) == True:
-            self.__lvl_ludibriar = lvl_ludibriar
+        return 
+    
+    def setLvlLudibriar(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_ludibriar = valor
         else:
             self.__lvl_ludibriar = 0
 
-        if self._valida_atributo_construtor(lvl_sabedoria_das_ruas) == True:
-            self.__lvl_sabedoria_das_ruas = lvl_sabedoria_das_ruas
+        return
+    
+    def setLvlSabedoriaDasRuas(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_sabedoria_das_ruas = valor
         else:
             self.__lvl_sabedoria_das_ruas = 0
 
+        return
+
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -262,28 +312,57 @@ class Artesao(Profissao):
 
     def __init__(self, lvl_educacao=0, lvl_criacao=0, lvl_negociacao=0, lvl_fisico=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlEducacao(lvl_educacao)
+        self.setLvlCriacao(lvl_criacao)
+        self.setLvlNegociacao(lvl_negociacao)
+        self.setLvlFisico(lvl_fisico)
 
-        # private
-        if self._valida_atributo_construtor(lvl_educacao) == True:
-            self.__lvl_educacao = lvl_educacao
-        else:
+    #Métodos getters
+    def getLvlEducacao(self):
+        return self.__lvl_educacao
+    
+    def getLvlCriacao(self):
+        return self.__lvl_criacao
+    
+    def getLvlNegociacao(self):
+        return self.__lvl_negociacao
+    
+    def getLvlFisico(self):
+        return self.__lvl_fisico
+
+    #Métodos setters
+    def setLvlEducacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_educacao = valor
+        else: 
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_criacao) == True:
-            self.__lvl_criacao = lvl_criacao
+        return
+    
+    def setLvlCriacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_criacao = valor
         else:
             self.__lvl_criacao = 0
 
-        if self._valida_atributo_construtor(lvl_negociacao) == True:
-            self.__lvl_negociacao = lvl_negociacao
+        return
+    
+    def setLvlNegociacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_negociacao = valor
         else:
             self.__lvl_negociacao = 0
 
-        if self._valida_atributo_construtor(lvl_fisico) == True:
-            self.__lvl_fisico = lvl_fisico
-        else:
+        return
+    
+    def setLvlFisico(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_fisico = valor
+        else: 
             self.__lvl_fisico = 0
+        return
 
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -348,32 +427,62 @@ class Artesao(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Criminoso(Profissao):
 
     def __init__(self, lvl_arrombar_fechaduras=0, lvl_falsificacao=0, lvl_atletismo=0, lvl_sabedoria_das_ruas=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlArrombarFechaduras(lvl_arrombar_fechaduras)
+        self.setLvlFalsificacao(lvl_falsificacao)
+        self.setLvlAtletismo(lvl_atletismo)
+        self.setLvlSabedoriaDasRuas(lvl_sabedoria_das_ruas)
 
-        if self._valida_atributo_construtor(lvl_arrombar_fechaduras) == True:
-            self.__lvl_arrombar_fechaduras = lvl_arrombar_fechaduras
+    #Métodos getters
+    def getLvlArrombarFechaduras(self):
+        return self.__lvl_arrombar_fechaduras
+    
+    def getLvlFalsificacao(self):
+        return self.__lvl_falsificacao
+    
+    def getLvlAtletismo(self):
+        return self.__lvl_atletismo
+    
+    def getLvlSabedoriaDasRuas(self):
+        return self.__lvl_sabedoria_das_ruas
+
+    #Métodos setters
+    def setLvlArrombarFechaduras(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_arrombar_fechaduras = valor
         else:
             self.__lvl_arrombar_fechaduras = 0
 
-        if self._valida_atributo_construtor(lvl_falsificacao) == True:
-            self.__lvl_falsificacao = lvl_falsificacao
+        return
+    
+    def setLvlFalsificacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_falsificacao = valor
         else:
             self.__lvl_falsificacao = 0
 
-        if self._valida_atributo_construtor(lvl_atletismo) == True:
-            self.__lvl_atletismo = lvl_atletismo
+        return
+    
+    def setLvlAtletismo(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_atletismo = valor
         else:
             self.__lvl_atletismo = 0
 
-        if self._valida_atributo_construtor(lvl_sabedoria_das_ruas) == True:
-            self.__lvl_sabedoria_das_ruas = lvl_sabedoria_das_ruas
+        return
+    
+    def setLvlSabedoriaDasRuas(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_sabedoria_das_ruas = valor
         else:
             self.__lvl_sabedoria_das_ruas = 0
 
+        return
+
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -438,32 +547,62 @@ class Criminoso(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Doutor(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_coragem=0, lvl_alquimia=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlCarisma(lvl_carisma)
+        self.setLvlCarisma(lvl_educacao)
+        self.setLvlCoragem(lvl_coragem)
+        self.setLvlAlquimia(lvl_alquimia)
 
-        if self._valida_atributo_construtor(lvl_carisma) == True:
-            self.__lvl_carisma = lvl_carisma
+    #Métodos getters
+    def getLvlCarisma(self):
+        return self.__lvl_carisma
+    
+    def getLvlEducacao(self):
+        return self.__lvl_educacao
+    
+    def getLvlCoragem(self):
+        return self.__lvl_coragem
+    
+    def getLvlAlquimia(self):
+        return self.__lvl_alquimia
+
+    #Métodos setters:
+    def setLvlCarisma(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_carisma = valor
         else:
             self.__lvl_carisma = 0
 
-        if self._valida_atributo_construtor(lvl_educacao) == True:
-            self.__lvl_educacao = lvl_educacao
+        return
+
+    def setLvlEducacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_educacao = valor
         else:
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_coragem) == True:
-            self.__lvl_coragem = lvl_coragem
+        return
+
+    def setLvlCoragem(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_coragem = valor
         else:
             self.__lvl_coragem = 0
 
-        if self._valida_atributo_construtor(lvl_alquimia) == True:
-            self.__lvl_alquimia = lvl_alquimia
+        return
+
+    def setLvlAlquimia(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_alquimia = valor
         else:
             self.__lvl_alquimia = 0
 
+        return
+
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -480,6 +619,7 @@ class Doutor(Profissao):
                     "1 - Upar Habilidade de: Educação \n"
                     "2 - Upar Habilidade de: Coragem \n"
                     "3 - Upar Habilidade de: Alquimia \n"
+                    "4 - Upar Habilidade de: Carisma"
                 )),title="❇ Subir de LVL: Skill Profissão ❇")
 
                 try:
@@ -487,7 +627,7 @@ class Doutor(Profissao):
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
 
-                if opcao >= 1 and opcao <= 3:
+                if opcao >= 1 and opcao <= 4:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
@@ -515,37 +655,74 @@ class Doutor(Profissao):
                     print("Subiu de nível em Alquimia!")
                 else:
                     raise ExcessaoNivelMaximo()
+                
+            elif opcao == 4:  # Carisma
+                self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
+                if self._verifica_aumenta_lvl_habilidade(self.__lvl_carisma) == True:
+                    self.__lvl_carisma = self.__lvl_carisma + 1
+                    print("Subiu de nível em Carisma!")
+                else:
+                    raise ExcessaoNivelMaximo()
 
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Cavaleiro(Profissao):
 
     def __init__(self, lvl_coragem=0, lvl_intimidacao=0, lvl_sobrevivencia=0, lvl_esquivar=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlCoragem(lvl_coragem)
+        self.setLvlIntimidacao(lvl_intimidacao)
+        self.setLvlSobrevivencia(lvl_sobrevivencia)
+        self.setLvlEsquivar(lvl_esquivar)
 
-        # private
-        if self._valida_atributo_construtor(lvl_coragem) == True:
-            self.__lvl_coragem = lvl_coragem
+    #Métodos getters
+    def getLvlCoragem(self):
+        return self.__lvl_coragem
+    
+    def getLvlIntimidacao(self):
+        return self.__lvl_intimidacao
+    
+    def getLvlSobrevivencia(self):
+        return self.__lvl_sobrevivencia
+    
+    def getLvlEsquivar(self):
+        return self.__lvl_esquivar
+
+    #Métodos setters
+    def setLvlCoragem(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_coragem = valor
         else:
             self.__lvl_coragem = 0
 
-        if self._valida_atributo_construtor(lvl_intimidacao) == True:
-            self.__lvl_intimidacao = lvl_intimidacao
+        return
+    
+    def setLvlIntimidacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_intimidacao = valor
         else:
             self.__lvl_intimidacao = 0
 
-        if self._valida_atributo_construtor(lvl_sobrevivencia) == True:
-            self.__lvl_sobrevivencia = lvl_sobrevivencia
-        else:
-            self.__lvl_sobrevivencia = 0
-
-        if self._valida_atributo_construtor(lvl_esquivar) == True:
-            self.__lvl_esquivar = lvl_esquivar
+        return
+    
+    def setLvlEsquivar(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_esquivar = valor
         else:
             self.__lvl_esquivar = 0
 
+        return
+
+    def setLvlSobrevivencia(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_sobrevivencia = valor
+        else:
+            self.__lvl_sobrevivencia = 0
+
+        return
+
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -609,33 +786,62 @@ class Cavaleiro(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Comerciante(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_negocios=0, lvl_persuasao=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlCarisma(lvl_carisma)
+        self.setLvlEducacao(lvl_educacao)
+        self.setLvlNegocios(lvl_negocios)
+        self.setLvlPersuasao(lvl_persuasao)
 
-        # private
-        if self._valida_atributo_construtor(lvl_carisma) == True:
-            self.__lvl_carisma = lvl_carisma
+    #Métodos getters
+    def getLvlCarisma(self):
+        return self.__lvl_carisma
+    
+    def getLvlEducacao(self):
+        return self.__lvl_educacao
+
+    def getLvlNegocios(self):
+        return self.__lvl_negocios
+    
+    def getLvlPersuasao(self):
+        return self.__lvl_persuasao
+
+    #Métodos setters
+    def setLvlCarisma(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_carisma = valor
         else:
             self.__lvl_carisma = 0
 
-        if self._valida_atributo_construtor(lvl_educacao) == True:
-            self.__lvl_educacao = lvl_educacao
+        return
+    
+    def setLvlEducacao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_educacao = valor
         else:
             self.__lvl_educacao = 0
 
-        if self._valida_atributo_construtor(lvl_negocios) == True:
-            self.__lvl_negocios = lvl_negocios
+        return
+    
+    def setLvlNegocios(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_negocios = valor
         else:
             self.__lvl_negocios = 0
 
-        if self._valida_atributo_construtor(lvl_persuasao) == True:
-            self.__lvl_persuasao = lvl_persuasao
+        return
+    
+    def setLvlPersuasao(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_persuasao = valor
         else:
             self.__lvl_persuasao = 0
 
+        return
+
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -699,34 +905,62 @@ class Comerciante(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Sacerdote(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_coragem=0, lvl_ensinar=0, lvl_lancar_feitico=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlCriarRitual(lvl_criar_ritual)
+        self.setLvlCoragem(lvl_coragem)
+        self.setLvlEnsinar(lvl_ensinar)
+        self.setLvlLancarFeitico(lvl_lancar_feitico)
 
-        # private
-        if self._valida_atributo_construtor(lvl_criar_ritual) == True:
-            self.__lvl_criar_ritual = lvl_criar_ritual
+    #Métodos getters
+    def getLvlCriarRitual(self):
+        return self.__lvl_criar_ritual
+    
+    def getLvlCoragem(self):
+        return self.__lvl_coragem
+    
+    def getLvlEnsinar(self):
+        return self.__lvl_ensinar
+
+    def getLvlLancarFeitico(self):
+        return self.__lvl_lancar_feitico
+
+    #Métodos setters
+    def setLvlCriarRitual(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_criar_ritual = valor
         else:
             self.__lvl_criar_ritual = 0
 
-        if self._valida_atributo_construtor(lvl_coragem) == True:
-            self.__lvl_coragem = lvl_coragem
+        return
+    
+    def setLvlCoragem(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_coragem = valor
         else:
             self.__lvl_coragem = 0
 
-        if self._valida_atributo_construtor(lvl_ensinar) == True:
-            self.__lvl_ensinar = lvl_ensinar
+        return
+    
+    def setLvlEnsinar(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_ensinar = valor
         else:
             self.__lvl_ensinar = 0
 
-        if self._valida_atributo_construtor(lvl_lancar_feitico) == True:
-            self.__lvl_lancar_feitico = lvl_lancar_feitico
+        return
+    
+    def setLvlLancarFeitico(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_lancar_feitico = valor
         else:
             self.__lvl_lancar_feitico = 0
 
-    
+        return
+
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
@@ -743,7 +977,7 @@ class Sacerdote(Profissao):
                     "1 - Upar Habilidade de: Criar Ritual \n"
                     "2 - Upar Habilidade de: Coragem \n"
                     "3 - Upar Habilidade de: Ensinar \n"
-                    "4 - Upar Habilidade de:  Lancar Feitiço"
+                    "4 - Upar Habilidade de:  Lançar Feitiço"
                 )),title="❇ Subir de LVL: Skill Profissão ❇")
 
                 try:
@@ -790,24 +1024,38 @@ class Sacerdote(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Desempregado(Profissao):
 
     def __init__(self, lvl_sobrevivencia=0, lvl_consciencia=0, nivel_geral=0):
         super().__init__(nivel_geral)
+        self.setLvlSobrevivencia(lvl_sobrevivencia)
+        self.setLvlConsciencia(lvl_consciencia)
 
-        # private
-        if self._valida_atributo_construtor(lvl_sobrevivencia) == True:
-            self.__lvl_sobrevivencia = lvl_sobrevivencia
+    #Métodos getters
+    def getLvlSobrevivencia(self):
+        return self.__lvl_sobrevivencia
+    
+    def getLvlConsciencia(self):
+        return self.__lvl_consciencia
+    
+    #Métodos setters
+    def setLvlSobrevivencia(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_sobrevivencia = valor
         else:
             self.__lvl_sobrevivencia = 0
 
-        if self._valida_atributo_construtor(lvl_consciencia) == True:
-            self.__lvl_consciencia = lvl_consciencia
+        return
+    
+    def setLvlConsciencia(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_consciencia = valor
         else:
             self.__lvl_consciencia = 0
 
+        return
 
+    #Métodos da classe
     def inicializa_profissao(self):
         return
 
