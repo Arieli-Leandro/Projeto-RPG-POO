@@ -1,11 +1,10 @@
-#O método Fabric vai permitir q a gnt tenha um menu de criação de jogador e profissão
-# Não esquecer dps de fazer um gerenciador com interface pra fazer as tasks e tbm vai precisar de um Singleton :/ (-A)
-
-#Fazer uma função para tocar música com o Pyfiglet
-
-#Entregável em Python Feito por Arieli (-A)
-
-#Nas profissões mandar o atributo verificador de atributo antes de fazer a igualação(esqueci o nome)
+""" Quadro de atualizações q eu tenho q fzr (-A)
+-> Música via terminal pelo Pyfliglet
+-> Colocar cor no Terminal
+-> Métodos de interface para funções de atacar e curar (Atacar vai dar o xp pra upar as skills)
+-> Terminar os getters e setters da Parte de Raça de Jogador
+-> Interface Gráfica
+"""
 
 from abc import ABC, abstractmethod
 from pyfiglet import Figlet
@@ -33,7 +32,11 @@ class ExcessaoTipoOpcaoInvalido(Exception):
     
 class ExcessaoOpcaoInvalida(Exception):
     def __str__(self):
-        return f"Digite uma opcao válida!"
+        return f"Digite uma opção válida!"
+    
+class ExcessaoNomeJogadorInvalido(Exception):
+    def __str__(self):
+        return f"Digite um nome válido!"
 
 class Profissao(ABC):
 
@@ -1106,52 +1109,129 @@ class Desempregado(Profissao):
 #fazer os getters e setters daqui tbbm
 class Jogador(ABC):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0):
-
-        self._profissao_jogador = None
-        self._nome = nome
-        self._hp_maximo = 100
+    def __init__(self, nome="Guest", hp=0, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0):
+        self._profissao_jogador = None #Se comporta como se fosse um ponteiro para a classe Profissao
+        self._hp_maximo = 300
         self._qtd_pontos = 0  
+        self.setNome(nome)
+        self.setHP(hp)
+        self.setNivelGeral(nivel_geral)
+        self.setLvlApostar(lvl_apostar)
+        self.setLvlBrigar(lvl_brigar)
+        self.setLvlForca(lvl_forca)
+        self.setLvlInteligencia(lvl_inteligencia)
 
-        if self._valida_atributo_construtor(hp) == True:
-            self._hp = hp
+    #Métodos getters
+    def getNivelGeral(self):
+        return self._nivel_geral
+    
+    def getHp(self):
+        return self._hp
+    
+    def getHPMax(self):
+        return self._hp_maximo
+    
+    def getNome(self):
+        return self._nome
+    
+    def getLvlBrigar(self):
+        return self._lvl_brigar
+    
+    def getLvlApostar(self):
+        return self._lvl_apostar
+    
+    def getLvlForca(self):
+        return self._lvl_forca
+    
+    def getLvlInteligencia(self):
+        return self._lvl_inteligencia
+    
+    def getProfissao(self):
+        return self._profissao_jogador
+    
+    #Só pra dps fazer uma função que mostre qts pontos o jogador tem
+    def getQtdPontos(self):
+        return self._qtd_pontos
+
+    #Métodos setters
+    def setNome(self, valor):
+        if(valor.split() == ""):
+            raise ExcessaoNomeJogadorInvalido()
         else:
-            self._hp = 0
-
-        if self._valida_atributo_construtor(nivel_geral) == True:
-            self._nivel_geral = nivel_geral
+            self._nome = valor
+        return
+    
+    def setNivelGeral(self, valor):
+        if(self._verifica_nivel_geral(valor) == True):
+            self._nivel_geral = valor
         else:
             self._nivel_geral = 0
 
-        if self._valida_atributo_construtor(lvl_brigar) == True:
-            self._lvl_brigar = lvl_brigar
+        return
+    
+    def setHP(self, valor):
+        if(self._verifica_valor_hp(valor) == True):
+            self._hp = valor
+        else:
+            self._hp = 0
+
+        return
+    
+    def setLvlBrigar(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self._lvl_brigar = valor
         else:
             self._lvl_brigar = 0
 
-        if self._valida_atributo_construtor(lvl_apostar) == True:
-            self._lvl_apostar = lvl_apostar
+        return
+    
+    def setLvlApostar(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self._lvl_apostar = valor
         else:
             self._lvl_apostar = 0
 
-        if self._valida_atributo_construtor(lvl_forca) == True:
-            self._lvl_forca = lvl_forca
+        return
+    
+    def setLvlForca(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self._lvl_forca = valor
         else:
             self._lvl_forca = 0
 
-        if self._valida_atributo_construtor(lvl_coragem) == True:
-            self._lvl_coragem = lvl_coragem
-        else:
-            self._lvl_coragem = 0
-
-        if self._valida_atributo_construtor(lvl_inteligencia) == True:
-            self._lvl_inteligencia = lvl_inteligencia
+        return
+    
+    def setLvlInteligencia(self, valor):
+        if(self._valida_atributo_construtor(valor) == True):
+            self._lvl_inteligencia = valor
         else:
             self._lvl_inteligencia = 0
+
+        return
+            
+    #Métodos da classe
+    def _verifica_valor_hp(self, valor):
+
+        retorno = False
+
+        if(valor > 0 and valor < self._hp_maximo):
+            retorno = True
+        
+        return retorno
 
     def _valida_atributo_construtor(self, valor):
         retorno = False
 
         if valor > 0:
+            retorno = True
+
+        return retorno
+    
+    def _verifica_nivel_geral(self, valor):
+
+        retorno = False
+
+        if(valor > 0):
             retorno = True
 
         return retorno
@@ -1186,10 +1266,9 @@ class Jogador(ABC):
                 console.print(Panel(Align.center(
                     "1 - Upar Habilidade de: Aposta \n"
                     "2 - Upar Habilidade de: Brigar \n"
-                    "3 - Upar Habilidade de: Coragem \n"
-                    "4 - Upar Habilidade de: Forca \n"
-                    "5 - Upar Habilidade de: Inteligencia \n"
-                    "6 - Não Upar Habilidade Básica"
+                    "3 - Upar Habilidade de: Forca \n"
+                    "4 - Upar Habilidade de: Inteligencia \n"
+                    "5 - Não Upar Habilidade Básica"
                 ),title="❇ Subir de LVL: Habilidades Básicas ❇"))
                 
                 try:
@@ -1197,7 +1276,7 @@ class Jogador(ABC):
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
             
-                if opcao >= 1 and opcao <= 6:
+                if opcao >= 1 and opcao <= 5:
                     break
                 else:
                     raise ExcessaoTipoOpcaoInvalido()
@@ -1217,16 +1296,8 @@ class Jogador(ABC):
                     print(self._nome + " Subiu de nível em Brigar!")
                 else:
                     raise ExcessaoNivelMaximo()
-
-            elif opcao == 3:  # Coragem
-                self._qtd_pontos = self._qtd_pontos - 1
-                if self.verifica_aumenta_lvl_habilidade(self._lvl_coragem) == True:
-                    self._lvl_coragem = self._lvl_coragem + 1
-                    print(self._nome + " Subiu de nível em Coragem!")
-                else:
-                    raise ExcessaoNivelMaximo()
             
-            elif opcao == 4:  # Forca
+            elif opcao == 3:  # Forca
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self._lvl_forca) == True:
                     self._lvl_forca = self._lvl_forca + 1
@@ -1234,14 +1305,14 @@ class Jogador(ABC):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 5:  # Inteligencia
+            elif opcao == 4:  # Inteligencia
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self._lvl_inteligencia) == True:
                     self._lvl_inteligencia = self._lvl_inteligencia + 1
                     print(self._nome + " Subiu de nível em Inteligência!")
                 else:
                     raise ExcessaoNivelMaximo()
-            elif opcao == 6:  # Não upar habilidade basica
+            elif opcao == 5:  # Não upar habilidade basica
                 pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
@@ -1258,8 +1329,8 @@ class Jogador(ABC):
 #fazer os getters e setters daqui tbbm
 class Humano(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia)
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
+        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
 
         if self._valida_atributo_construtor(imunidade) == True:
             self.__imunidade = imunidade
@@ -1297,10 +1368,10 @@ class Humano(Jogador):
             while True:
 
                 console.print(Panel(Align.center(
-                    "7 - Upar Habilidade de: Sedução \n"
-                    "8 - Upar Habilidade de: Persuasão \n"
-                    "9 - Upar Habilidade de: Teimosia \n"
-                    "10 - Não Upar Habilidade Específica"
+                    "6 - Upar Habilidade de: Sedução \n"
+                    "7 - Upar Habilidade de: Persuasão \n"
+                    "8 - Upar Habilidade de: Teimosia \n"
+                    "9 - Não Upar Habilidade Específica"
                 ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
@@ -1308,12 +1379,12 @@ class Humano(Jogador):
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
 
-                if opcao >= 7 and opcao <= 10:
+                if opcao >= 6 and opcao <= 9:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 7:
+            if opcao == 6:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_seducao) == True:
                     self.__lvl_seducao = self.__lvl_seducao + 1
@@ -1321,7 +1392,7 @@ class Humano(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 8:
+            elif opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_persuasao) == True:
                     self.__lvl_persuasao = self.__lvl_persuasao + 1
@@ -1329,14 +1400,14 @@ class Humano(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 9:
+            elif opcao == 8:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_teimosia) == True:
                     self.__lvl_teimosia = self.__lvl_teimosia + 1
                     print(self._nome + " Subiu de nível em Teimosia!")
                 else:
                     raise ExcessaoNivelMaximo()
-            elif opcao == 10:
+            elif opcao == 9:
                 pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
@@ -1346,8 +1417,8 @@ class Humano(Jogador):
 #fazer os getters e setters daqui tbbm
 class Bruxo(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia)
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
+        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
 
         self.__imunidade = 13   # private - bruxo tem o nivel maximo de imunidade
         self.__lvl_carisma = 0  # private - de acordo com o livro, bruxos tem carisma 0
@@ -1373,8 +1444,8 @@ class Bruxo(Jogador):
             while True:
 
                 console.print(Panel(Align.center(
-                    "7 - Upar Habilidade de: Reflexos Relâmpagos \n"
-                    "8 - Não Upar Habilidade Específica"
+                    "6 - Upar Habilidade de: Reflexos Relâmpagos \n"
+                    "7 - Não Upar Habilidade Específica"
                 ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
@@ -1382,19 +1453,19 @@ class Bruxo(Jogador):
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
 
-                if opcao >= 7 and opcao <= 8:
+                if opcao == 6 or opcao == 7:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 7:
+            if opcao == 6:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_reflexos_relampagos) == True:
                     self.__lvl_reflexos_relampagos = self.__lvl_reflexos_relampagos + 1
                     print(self._nome + " Subiu de nível em Reflexos Relâmpagos!")
                 else:
                     raise ExcessaoNivelMaximo()
-            elif opcao == 8:
+            elif opcao == 7:
                 pass
                 
         else:
@@ -1403,8 +1474,8 @@ class Bruxo(Jogador):
 #fazer os getters e setters daqui tbbm
 class Anao(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, imunidade=0, lvl_armadura=0, lvl_deducao=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia)
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_armadura=0, lvl_deducao=0):
+        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
 
         if self._valida_atributo_construtor(imunidade) == True:
             self.__imunidade = imunidade
@@ -1437,9 +1508,9 @@ class Anao(Jogador):
 
             while True:
                 console.print(Panel(Align.center(
-                    "7 - Upar Habilidade de: Armaduras \n"
-                    "8 - Upar Habilidade de: Dedução \n"
-                    "9 - Não Upar Habilidade Específica"
+                    "6 - Upar Habilidade de: Armaduras \n"
+                    "7 - Upar Habilidade de: Dedução \n"
+                    "8 - Não Upar Habilidade Específica"
                 ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
@@ -1447,12 +1518,12 @@ class Anao(Jogador):
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
 
-                if opcao >= 7 and opcao <= 9:
+                if opcao >= 6 and opcao <= 8:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 7:
+            if opcao == 6:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_armadura) == True:
                     self.__lvl_armadura = self.__lvl_armadura + 1
@@ -1460,14 +1531,14 @@ class Anao(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 8:
+            elif opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_deducao) == True:
                     self.__lvl_deducao = self.__lvl_deducao + 1
                     print(self._nome + " Subiu de nível em Dedução!")
                 else:
                     raise ExcessaoNivelMaximo()
-            elif opcao == 9:
+            elif opcao == 8:
                 pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
@@ -1476,8 +1547,8 @@ class Anao(Jogador):
 #fazer os getters e setters daqui tbbm
 class Elfo(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_coragem=0, lvl_inteligencia=0, imunidade=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia)
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
+        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
 
         if self._valida_atributo_construtor(imunidade) == True:
             self.__imunidade = imunidade
@@ -1503,9 +1574,6 @@ class Elfo(Jogador):
         return
 
     def aumenta_nivel_habilidade(self):
-
-
-
         super().aumenta_nivel_habilidade()
 
         console = Console()
@@ -1516,10 +1584,10 @@ class Elfo(Jogador):
 
             while True:
                 console.print(Panel(Align.center(
-                    "7 - Upar Habilidade de: Artesanato \n"
-                    "8 - Upar Habilidade de: Artilharia de Arcos \n"
-                    "9 - Upar Habilidade de: Sintonia da Natureza \n"
-                    "10 - Não Upar Habilidade Específica"
+                    "6 - Upar Habilidade de: Artesanato \n"
+                    "7 - Upar Habilidade de: Artilharia de Arcos \n"
+                    "8 - Upar Habilidade de: Sintonia da Natureza \n"
+                    "9 - Não Upar Habilidade Específica"
                 ),title="❇ Subir de LVL: Habilidades Específicas ❇"))
 
                 try:
@@ -1528,12 +1596,12 @@ class Elfo(Jogador):
                     raise ExcessaoTipoOpcaoInvalido()
                 
 
-                if opcao >= 7 and opcao <= 10:
+                if opcao >= 6 and opcao <= 9:
                     break
                 else:
                     raise ExcessaoOpcaoInvalida()
 
-            if opcao == 7:
+            if opcao == 6:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_artesanato) == True:
                     self.__lvl_artesanato = self.__lvl_artesanato + 1
@@ -1541,7 +1609,7 @@ class Elfo(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 8:
+            elif opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_arcos) == True:
                     self.__lvl_arcos = self.__lvl_arcos + 1
@@ -1549,14 +1617,14 @@ class Elfo(Jogador):
                 else:
                     raise ExcessaoNivelMaximo()
 
-            elif opcao == 9:
+            elif opcao == 8:
                 self._qtd_pontos = self._qtd_pontos - 1
                 if self.verifica_aumenta_lvl_habilidade(self.__lvl_sintonia_natureza) == True:
                     self.__lvl_sintonia_natureza = self.__lvl_sintonia_natureza + 1
                     print(self._nome + " Subiu de nível em Sintonia da Natureza!")
                 else:
                     raise ExcessaoNivelMaximo()
-            elif opcao == 10:
+            elif opcao == 9:
                 pass
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
@@ -1565,20 +1633,20 @@ class Elfo(Jogador):
 class JogadorFactory:
 
     @staticmethod
-    def criar_jogador(tipo, nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0, lvl_reflexos_relampagos=0, lvl_armadura=0, lvl_deducao=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
+    def criar_jogador(tipo, nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0, lvl_reflexos_relampagos=0, lvl_armadura=0, lvl_deducao=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
 
         #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric
         jogador = None
         
         match tipo:
             case 1: #Humano
-                jogador = Humano(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade, lvl_seducao, lvl_persuasao, lvl_teimosia)
+                jogador = Humano(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade, lvl_seducao, lvl_persuasao, lvl_teimosia)
             case 2: #Bruxo
-                jogador = Bruxo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, lvl_reflexos_relampagos)
+                jogador = Bruxo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_reflexos_relampagos)
             case 3: #Anão
-                jogador = Anao(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade, lvl_armadura, lvl_deducao)
+                jogador = Anao(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade, lvl_armadura, lvl_deducao)
             case 4: #Elfo
-                jogador = Elfo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_coragem, lvl_inteligencia, imunidade, lvl_artesanato, lvl_arcos, lvl_sintonia_natureza)
+                jogador = Elfo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade, lvl_artesanato, lvl_arcos, lvl_sintonia_natureza)
 
         return jogador
     
