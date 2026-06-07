@@ -1749,33 +1749,39 @@ def menu_profissao():
     return opcao
 
 if __name__ == "__main__":
+    
+    try:
+        
+        console = Console()
 
-    console = Console()
+        fonte = Figlet(font="starwars")
 
-    fonte = Figlet(font="starwars")
+        print(fonte.renderText("RPG"))
+        print(fonte.renderText("The Witcher"))
 
-    print(fonte.renderText("RPG"))
-    print(fonte.renderText("The Witcher"))
-
-    console.print(
-        Panel(
-            Align.center("Digite o nome do personagem:")
+        console.print(
+            Panel(
+                Align.center("Digite o nome do personagem:")
+            )
         )
-    )
-    nome = input("")
+        nome = input("")
 
-    opcao_jogador = menu_jogador()
+        opcao_jogador = menu_jogador()
 
-    jogador = JogadorFactory.criar_jogador(opcao_jogador,nome,100,200,0,0,0,0,0)
-    opcao_profissao = menu_profissao()
+        jogador = JogadorFactory.criar_jogador(opcao_jogador,nome,100,200,0,0,0,0,0)
+        opcao_profissao = menu_profissao()
 
-    profissao = ProfissaoFactory.criar_profissao(opcao_profissao)
+        profissao = ProfissaoFactory.criar_profissao(opcao_profissao)
 
-    jogador._profissao_jogador = profissao
+        jogador._profissao_jogador = profissao
 
-    jogador.aumenta_nivel_habilidade()
+        jogador.aumenta_nivel_habilidade()
 
-    print("\nPersonagem criado com sucesso!")
-    print("Nome:", jogador._nome)
-    print("Raça:", type(jogador).__name__) #trocar isso dps por um getter plmds -A
-    print("Profissão:", type(jogador._profissao_jogador).__name__) #trocar isso dps por um getter plmds -A
+        print("\nPersonagem criado com sucesso!")
+        print("Nome:", jogador._nome)
+        print("Raça:", type(jogador).__name__) #trocar isso dps por um getter plmds -A
+        print("Profissão:", type(jogador._profissao_jogador).__name__) #trocar isso dps por um getter plmds -A
+    except Exception as e:
+        print(e)
+
+    
