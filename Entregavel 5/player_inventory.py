@@ -3,7 +3,6 @@
 -> Colocar cor no Terminal
 -> Métodos de interface para funções de atacar e curar (Atacar vai dar o xp pra upar as skills)
 -> Interface Gráfica
--> Pegar tudo sobre a imunidade e migrar para a classe mãe e tornar esse método abstrato
 """
 
 from abc import ABC, abstractmethod
@@ -209,7 +208,6 @@ class Mago(Profissao):
 
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
-#fazer os getters e setters daqui tbbm
 
 class Bardo(Profissao):
 
@@ -1108,7 +1106,7 @@ class Desempregado(Profissao):
 
 class Jogador(ABC):
 
-    def __init__(self, nome="Guest", hp=0, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0):
+    def __init__(self, nome="Guest", hp=0, imunidade=0, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0):
         self._profissao_jogador = None #Se comporta como se fosse um ponteiro para a classe Profissao
         self._hp_maximo = 300
         self._qtd_pontos = 0  
@@ -1119,6 +1117,7 @@ class Jogador(ABC):
         self.setLvlBrigar(lvl_brigar)
         self.setLvlForca(lvl_forca)
         self.setLvlInteligencia(lvl_inteligencia)
+        self.setImunidade(imunidade)
 
     #Métodos getters
     def getNivelGeral(self):
@@ -1151,6 +1150,9 @@ class Jogador(ABC):
     #Só pra dps fazer uma função que mostre qts pontos o jogador tem
     def getQtdPontos(self):
         return self._qtd_pontos
+    
+    def getImunidade(self):
+        return self._imunidade
 
     #Métodos setters
     def setNome(self, valor):
@@ -1205,6 +1207,15 @@ class Jogador(ABC):
             self._lvl_inteligencia = valor
         else:
             self._lvl_inteligencia = 0
+
+        return
+    
+    def setImunidade(self, valor):
+
+        if(self._valida_atributo_construtor(valor) == True):
+            self._imunidade = valor
+        else:
+            self._imunidade = 0
 
         return
             
@@ -1327,17 +1338,13 @@ class Jogador(ABC):
 
 class Humano(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
-        self.setImunidade(imunidade)
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=5, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
+        super().__init__(nome, hp, imunidade, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
         self.setLvlSeducao(lvl_seducao)
         self.setLvlPersuasao(lvl_persuasao)
         self.setLvlTeimosia(lvl_teimosia)
 
     #Métodos getters
-    def getImunidade(self):
-        return self.__imunidade
-
     def getLvlSeducao(self):
         return self.__lvl_seducao
     
@@ -1348,15 +1355,6 @@ class Humano(Jogador):
         return self.__lvl_teimosia
 
     #Métodos setters
-    def setImunidade(self, valor):
-        
-        if(self._valida_atributo_construtor(valor) == True):
-            self.__imunidade = valor
-        else:
-            self.__imunidade = 0
-
-        return
-            
     def setLvlSeducao(self, valor):
         
         if(self._valida_atributo_construtor(valor) == True):
@@ -1449,16 +1447,12 @@ class Humano(Jogador):
 
 class Bruxo(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
-        self.__imunidade = 13   #No RPG o bruxo tem imunidade máxima e nn tem como aumentar/ diminuir a imunidade dele
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0, imunidade=13):
+        super().__init__(nome, hp, imunidade, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
         self.__lvl_carisma = 0  # private - de acordo com o livro, bruxos tem carisma 0 nn tem como aumentar/diminuir
         self.setLvlReflexosRelampagos(lvl_reflexos_relampagos)
 
-    #Métodos getters
-    def getImunidade(self):
-        return self.__imunidade
-    
+    #Métodos getters 
     def getCarisma(self):
         return self.__lvl_carisma
     
@@ -1474,7 +1468,6 @@ class Bruxo(Jogador):
             self.__lvl_reflexos_relampagos = 0
 
         return
-
 
     #Métodos da classe
     def inicializa_jogador(self):
@@ -1522,32 +1515,19 @@ class Bruxo(Jogador):
 
 class Anao(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_armadura=0, lvl_deducao=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
-        self.setImunidade(imunidade)
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=7, lvl_armadura=0, lvl_deducao=0):
+        super().__init__(nome, hp, imunidade, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
         self.setLvlArmadura(lvl_armadura)
         self.setLvlDeducao(lvl_deducao)
 
-    #Métodos getters
-    def getImunidade(self):
-        return self.__imunidade
-    
+    #Métodos getters    
     def getLvlArmadura(self):
         return self.__lvl_armadura
     
     def getLvlDeducao(self):
         return self.__lvl_deducao
 
-    #Métodos setters
-    def setImunidade(self, valor):
-        
-        if(self._valida_atributo_construtor(valor) == True):
-            self.__imunidade = valor
-        else:
-            self.__imunidade = 0
-
-        return
-    
+    #Métodos setters  
     def setLvlArmadura(self, valor):
 
         if(self._valida_atributo_construtor(valor) == True):
@@ -1620,17 +1600,13 @@ class Anao(Jogador):
 
 class Elfo(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
-        super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
-        self.setImunidade(imunidade)
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=8, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
+        super().__init__(nome, hp, imunidade, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
         self.setLvlSintoniaNatureza(lvl_sintonia_natureza)
         self.setLvlArcos(lvl_arcos)
         self.setLvlArtesanato(lvl_artesanato)
 
-    #Métodos getters
-    def getImunidade(self):
-        return self.__imunidade
-    
+    #Métodos getters   
     def getLvlArtesanato(self):
         return self.__lvl_artesanato
     
@@ -1640,16 +1616,7 @@ class Elfo(Jogador):
     def getLvlSintoniaNatureza(self):
         return self.__lvl_sintonia_natureza
 
-    #Métodos setters
-    def setImunidade(self, valor):
-
-        if(self._valida_atributo_construtor(valor) == True):
-            self.__imunidade = valor
-        else:
-            self.__imunidade = 0
-
-        return
-    
+    #Métodos setters   
     def setLvlArcos(self, valor):
 
         if(self._valida_atributo_construtor(valor) == True):
@@ -1741,20 +1708,20 @@ class Elfo(Jogador):
 class JogadorFactory:
 
     @staticmethod
-    def criar_jogador(tipo, nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0, lvl_reflexos_relampagos=0, lvl_armadura=0, lvl_deducao=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
+    def criar_jogador(tipo, nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0, lvl_reflexos_relampagos=0, lvl_armadura=0, lvl_deducao=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
 
         #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric
         jogador = None
         
         match tipo:
             case 1: #Humano
-                jogador = Humano(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade, lvl_seducao, lvl_persuasao, lvl_teimosia)
+                jogador = Humano(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_seducao, lvl_persuasao, lvl_teimosia)
             case 2: #Bruxo
                 jogador = Bruxo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_reflexos_relampagos)
             case 3: #Anão
-                jogador = Anao(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade, lvl_armadura, lvl_deducao)
+                jogador = Anao(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_armadura, lvl_deducao)
             case 4: #Elfo
-                jogador = Elfo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, imunidade, lvl_artesanato, lvl_arcos, lvl_sintonia_natureza)
+                jogador = Elfo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_artesanato, lvl_arcos, lvl_sintonia_natureza)
 
         return jogador
     
@@ -1877,6 +1844,7 @@ if __name__ == "__main__":
         opcao_jogador = menu_jogador()
 
         jogador = JogadorFactory.criar_jogador(opcao_jogador,nome,100,200,0,0,0,0,0)
+        jogador = JogadorFactory.criar_jogador(opcao_jogador, nome, 150, 120, 13, 11, 7, 8, 11, 7, 8)
         opcao_profissao = menu_profissao()
 
         profissao = ProfissaoFactory.criar_profissao(opcao_profissao)
