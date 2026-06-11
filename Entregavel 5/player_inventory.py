@@ -1349,7 +1349,7 @@ class Humano(Jogador):
         return self.__lvl_seducao
     
     def getLvlPersuasao(self):
-        return self.__lvl_seducao
+        return self.__lvl_persuasao
     
     def getLvlTeimosia(self):
         return self.__lvl_teimosia
@@ -1822,6 +1822,19 @@ def menu_profissao():
             raise ExcessaoOpcaoInvalida()
         
     return opcao
+
+#O Personagem tem a capacidade de combater monstros
+class ICombate():
+    pass
+
+#O Personagem tem a capacidade de se curar
+class ICuravel():
+    pass
+
+#O personagem tem a capacidade de ficar doente
+class IDoente():
+    pass
+
 
 if __name__ == "__main__":
     
