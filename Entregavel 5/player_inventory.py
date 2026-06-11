@@ -2,8 +2,8 @@
 -> Música via terminal pelo Pyfliglet
 -> Colocar cor no Terminal
 -> Métodos de interface para funções de atacar e curar (Atacar vai dar o xp pra upar as skills)
--> Terminar os getters e setters da Parte de Raça de Jogador
 -> Interface Gráfica
+-> Pegar tudo sobre a imunidade e migrar para a classe mãe e tornar esse método abstrato
 """
 
 from abc import ABC, abstractmethod
@@ -1106,7 +1106,6 @@ class Desempregado(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Jogador(ABC):
 
     def __init__(self, nome="Guest", hp=0, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0):
@@ -1326,32 +1325,66 @@ class Jogador(ABC):
     def __del__(self):
         print("Removendo os dados do jogador: " + self._nome)
 
-#fazer os getters e setters daqui tbbm
 class Humano(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
         super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
+        self.setImunidade(imunidade)
+        self.setLvlSeducao(lvl_seducao)
+        self.setLvlPersuasao(lvl_persuasao)
+        self.setLvlTeimosia(lvl_teimosia)
 
-        if self._valida_atributo_construtor(imunidade) == True:
-            self.__imunidade = imunidade
+    #Métodos getters
+    def getImunidade(self):
+        return self.__imunidade
+
+    def getLvlSeducao(self):
+        return self.__lvl_seducao
+    
+    def getLvlPersuasao(self):
+        return self.__lvl_seducao
+    
+    def getLvlTeimosia(self):
+        return self.__lvl_teimosia
+
+    #Métodos setters
+    def setImunidade(self, valor):
+        
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__imunidade = valor
         else:
             self.__imunidade = 0
 
-        if self._valida_atributo_construtor(lvl_seducao) == True:
-            self.__lvl_seducao = lvl_seducao
+        return
+            
+    def setLvlSeducao(self, valor):
+        
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_seducao = valor
         else:
             self.__lvl_seducao = 0
 
-        if self._valida_atributo_construtor(lvl_persuasao) == True:
-            self.__lvl_persuasao = lvl_persuasao
+        return
+
+    def setLvlPersuasao(self, valor):
+        
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_persuasao = valor
         else:
             self.__lvl_persuasao = 0
 
-        if self._valida_atributo_construtor(lvl_teimosia) == True:
-            self.__lvl_teimosia = lvl_teimosia
+        return
+
+    def setLvlTeimosia(self, valor):
+        
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_teimosia = valor
         else:
             self.__lvl_teimosia = 0
 
+        return
+
+    #Métodos da classe
     def inicializa_jogador(self):
         return
 
@@ -1414,20 +1447,36 @@ class Humano(Jogador):
         
         return
 
-#fazer os getters e setters daqui tbbm
 class Bruxo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
         super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
+        self.__imunidade = 13   #No RPG o bruxo tem imunidade máxima e nn tem como aumentar/ diminuir a imunidade dele
+        self.__lvl_carisma = 0  # private - de acordo com o livro, bruxos tem carisma 0 nn tem como aumentar/diminuir
+        self.setLvlReflexosRelampagos(lvl_reflexos_relampagos)
 
-        self.__imunidade = 13   # private - bruxo tem o nivel maximo de imunidade
-        self.__lvl_carisma = 0  # private - de acordo com o livro, bruxos tem carisma 0
+    #Métodos getters
+    def getImunidade(self):
+        return self.__imunidade
+    
+    def getCarisma(self):
+        return self.__lvl_carisma
+    
+    def getLvlReflexos(self):
+        return self.__lvl_reflexos_relampagos
 
-        if self._valida_atributo_construtor(lvl_reflexos_relampagos) == True:
-            self.__lvl_reflexos_relampagos = lvl_reflexos_relampagos
+    #Métodos setters
+    def setLvlReflexosRelampagos(self, valor):
+
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_reflexos_relampagos = valor
         else:
             self.__lvl_reflexos_relampagos = 0
 
+        return
+
+
+    #Métodos da classe
     def inicializa_jogador(self):
         return
 
@@ -1471,28 +1520,53 @@ class Bruxo(Jogador):
         else:
             ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
 class Anao(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_armadura=0, lvl_deducao=0):
         super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
+        self.setImunidade(imunidade)
+        self.setLvlArmadura(lvl_armadura)
+        self.setLvlDeducao(lvl_deducao)
 
-        if self._valida_atributo_construtor(imunidade) == True:
-            self.__imunidade = imunidade
+    #Métodos getters
+    def getImunidade(self):
+        return self.__imunidade
+    
+    def getLvlArmadura(self):
+        return self.__lvl_armadura
+    
+    def getLvlDeducao(self):
+        return self.__lvl_deducao
+
+    #Métodos setters
+    def setImunidade(self, valor):
+        
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__imunidade = valor
         else:
             self.__imunidade = 0
 
-        if self._valida_atributo_construtor(lvl_armadura) == True:
-            self.__lvl_armadura = lvl_armadura
+        return
+    
+    def setLvlArmadura(self, valor):
+
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_armadura = valor
         else:
             self.__lvl_armadura = 0
+        
+        return
+    
+    def setLvlDeducao(self, valor):
 
-        if self._valida_atributo_construtor(lvl_deducao) == True:
-            self.__lvl_deducao = lvl_deducao
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_deducao = valor
         else:
             self.__lvl_deducao = 0
 
+        return
 
+    #Métodos da classe
     def inicializa_jogador(self):
         return
 
@@ -1544,32 +1618,66 @@ class Anao(Jogador):
             raise ExcessaoPontosInsuficientesSubirNivel()
         return
 
-#fazer os getters e setters daqui tbbm
 class Elfo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
         super().__init__(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
+        self.setImunidade(imunidade)
+        self.setLvlSintoniaNatureza(lvl_sintonia_natureza)
+        self.setLvlArcos(lvl_arcos)
+        self.setLvlArtesanato(lvl_artesanato)
 
-        if self._valida_atributo_construtor(imunidade) == True:
-            self.__imunidade = imunidade
+    #Métodos getters
+    def getImunidade(self):
+        return self.__imunidade
+    
+    def getLvlArtesanato(self):
+        return self.__lvl_artesanato
+    
+    def getLvlArcos(self):
+        return self.__lvl_arcos
+    
+    def getLvlSintoniaNatureza(self):
+        return self.__lvl_sintonia_natureza
+
+    #Métodos setters
+    def setImunidade(self, valor):
+
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__imunidade = valor
         else:
             self.__imunidade = 0
 
-        if self._valida_atributo_construtor(lvl_artesanato) == True:
-            self.__lvl_artesanato = lvl_artesanato
-        else:
-            self.__lvl_artesanato = 0
+        return
+    
+    def setLvlArcos(self, valor):
 
-        if self._valida_atributo_construtor(lvl_arcos) == True:
-            self.__lvl_arcos = lvl_arcos
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_arcos = valor
         else:
             self.__lvl_arcos = 0
 
-        if self._valida_atributo_construtor(lvl_sintonia_natureza) == True:
-            self.__lvl_sintonia_natureza = lvl_sintonia_natureza
+        return
+    
+    def setLvlSintoniaNatureza(self, valor):
+
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_sintonia_natureza = valor
         else:
             self.__lvl_sintonia_natureza = 0
 
+        return
+    
+    def setLvlArtesanato(self, valor):
+
+        if(self._valida_atributo_construtor(valor) == True):
+            self.__lvl_artesanato = valor
+        else:
+            self.__lvl_artesanato = 0
+
+        return        
+
+    #Métodos da Classe
     def inicializa_jogador(self):
         return
 
