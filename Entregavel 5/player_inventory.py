@@ -1338,7 +1338,7 @@ class Jogador(ABC):
 
 class Humano(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=5, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade=5, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
         super().__init__(nome, hp, imunidade, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
         self.setLvlSeducao(lvl_seducao)
         self.setLvlPersuasao(lvl_persuasao)
@@ -1447,7 +1447,7 @@ class Humano(Jogador):
 
 class Bruxo(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0, imunidade=13):
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade = 13, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
         super().__init__(nome, hp, imunidade, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
         self.__lvl_carisma = 0  # private - de acordo com o livro, bruxos tem carisma 0 nn tem como aumentar/diminuir
         self.setLvlReflexosRelampagos(lvl_reflexos_relampagos)
@@ -1515,7 +1515,7 @@ class Bruxo(Jogador):
 
 class Anao(Jogador):
 
-    def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=7, lvl_armadura=0, lvl_deducao=0):
+    def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade=7, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_armadura=0, lvl_deducao=0):
         super().__init__(nome, hp, imunidade, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia)
         self.setLvlArmadura(lvl_armadura)
         self.setLvlDeducao(lvl_deducao)
@@ -1705,23 +1705,183 @@ class Elfo(Jogador):
             raise ExcessaoPontosInsuficientesSubirNivel()
         return
 
+class ExcessaoNivelInvalido(Exception):
+
+    def __str__(self):
+        return f"Valor de nível Inválido, Mínimo 0 e Máximo 13!"
+
+#Dependendo do tipo de personagem, ele entra na função e pede os parâmetros necessários para a criação naquele jogador
+def recebeParametrosJogador(tipo):
+
+    console = Console()
+
+    lista_strings = [
+        ("Digite o nome do personagem: ", str, None, None),
+        ("Digite o hp do personagem: ", int, 0, 300),
+        ("Digite o nível geral do personagem: ", int, 0, 200),
+        ("Digite o nível de briga do personagem: ", int, 0, 13),
+        ("Digite o nível de apostar do personagem: ", int, 0, 13),
+        ("Digite o nível de força do personagem: ", int, 0, 13),
+        ("Digite o nível de inteligência do personagem: ", int, 0, 13)
+    ]
+
+    lista_strings_humano = [
+        ("Digite o nível de Sedução do personagem: ", int, 0, 13),
+        ("Digite o nível de Persuasão do personagem: ", int, 0, 13),
+        ("Digite o nível de Teimosia do personagem: ", int, 0, 13)
+    ]
+
+    lista_strings_bruxo = [
+        ("Digite o nível de Reflexos Relâmpagos do personagem: ", int, 0, 13)
+    ]
+
+    lista_strings_anao = [
+        ("Digite o nível de Armadura do persoagem: ", int, 0, 13),
+        ("Digite o nível de Dedução do personagem: ", int, 0, 13)
+    ]
+
+    lista_strings_elfo = [
+        ("Digite o nível de Artesanato do personagem: ", int, 0, 13),
+        ("Digite o nível em Arcos do personagem: ", int, 0, 13),
+        ("Digite o nível em Sintonia da Natureza do personagem: ", int, 0, 13)
+    ]
+
+    #Aqui vai ficar guardado todas as variáveis e elas vão ser retornadas para a classe Factory para poder criar um personagem naquele tipo
+    lista_parametros_tipo = []
+    
+    for mensagem, tipo_var, minimo, maximo in lista_strings:
+
+        console.print(Panel(Align.center(mensagem)))
+
+        if tipo_var == str:
+            valor = input("")
+        else:
+            while True:
+                try:
+                    valor = int(input(""))
+
+                    if minimo <= valor <= maximo:
+                        break
+                    else:
+                        print(f"Digite um valor entre {minimo} e {maximo}")
+                        console.print(Panel(Align.center(mensagem)))
+                except ValueError:
+                    print("Digite apenas números!")
+
+        lista_parametros_tipo.append(valor)
+    
+    #Parâmetros específicos
+    match tipo:
+        case 1: #Humano
+            for mensagem, tipo_var, minimo, maximo in lista_strings_humano:
+
+                console.print(Panel(Align.center(mensagem)))
+            
+                if tipo_var == str:
+                    valor = input("")
+                else:
+                    while True:
+                        try:
+                            valor = int(input(""))
+
+                            if minimo <= valor <= maximo:
+                                break
+                            else:
+                                print(f"Digite um valor entre {minimo} e {maximo}")
+                                console.print(Panel(Align.center(mensagem)))
+                        except ValueError:
+                            print("Digite apenas números!")
+
+                lista_parametros_tipo.append(valor)
+        case 2: #Bruxo
+            for mensagem, tipo_var, minimo, maximo in lista_strings_bruxo:
+
+                console.print(Panel(Align.center(mensagem)))
+
+                if tipo_var == str:
+                    valor = input("")
+                else:
+                    while True:
+                        try:
+                            valor = int(input(""))
+
+                            if minimo <= valor <= maximo:
+                                break
+                            else:
+                                print(f"Digite um valor entre {minimo} e {maximo}")
+                                console.print(Panel(Align.center(mensagem)))
+                        except ValueError:
+                            print("Digite apenas números!")
+
+                lista_parametros_tipo.append(valor)
+        case 3: #Anão
+            for mensagem, tipo_var, minimo, maximo in lista_strings_anao:
+
+                console.print(Panel(Align.center(mensagem)))
+
+                if tipo_var == str:
+                    valor = input("")
+                else:
+                    while True:
+                        try:
+                            valor = int(input(""))
+
+                            if minimo <= valor <= maximo:
+                                break
+                            else:
+                                print(f"Digite um valor entre {minimo} e {maximo}")
+                                console.print(Panel(Align.center(mensagem)))
+                        except ValueError:
+                            print("Digite apenas números!")
+
+                lista_parametros_tipo.append(valor)
+        case 4: #Elfo
+            for mensagem, tipo_var, minimo, maximo in lista_strings_elfo:
+
+                console.print(Panel(Align.center(mensagem)))
+
+                if tipo_var == str:
+                    valor = input("")
+                else:
+                    while True:
+                        try:
+                            valor = int(input(""))
+
+                            if minimo <= valor <= maximo:
+                                break
+                            else:
+                                print(f"Digite um valor entre {minimo} e {maximo}")
+                                console.print(Panel(Align.center(mensagem)))
+                        except ValueError:
+                            print("Digite apenas números!")
+
+                lista_parametros_tipo.append(valor)
+
+
+    return lista_parametros_tipo
+
 class JogadorFactory:
 
     @staticmethod
-    def criar_jogador(tipo, nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0, lvl_reflexos_relampagos=0, lvl_armadura=0, lvl_deducao=0, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
+    def criar_jogador(tipo):
 
-        #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric
         jogador = None
+
+        lista_params = recebeParametrosJogador(tipo)
         
         match tipo:
             case 1: #Humano
-                jogador = Humano(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_seducao, lvl_persuasao, lvl_teimosia)
+                imunidade = 5
+                jogador = Humano(lista_params[0], lista_params[1], lista_params[2], imunidade, lista_params[3], lista_params[4], lista_params[5], lista_params[6], lista_params[7], lista_params[8], lista_params[9])
             case 2: #Bruxo
-                jogador = Bruxo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_reflexos_relampagos)
+                imunidade = 13
+                jogador = Bruxo(lista_params[0], lista_params[1], lista_params[2], imunidade,lista_params[3], lista_params[4], lista_params[5], lista_params[6], lista_params[7])
             case 3: #Anão
-                jogador = Anao(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_armadura, lvl_deducao)
+                imunidade = 7
+                jogador = Anao(lista_params[0], lista_params[1], lista_params[2], imunidade, lista_params[3], lista_params[4], lista_params[5], lista_params[6], lista_params[7], lista_params[8])
             case 4: #Elfo
-                jogador = Elfo(nome, hp, nivel_geral, lvl_brigar, lvl_apostar, lvl_forca, lvl_inteligencia, lvl_artesanato, lvl_arcos, lvl_sintonia_natureza)
+                imunidade = 8
+                jogador = Elfo(lista_params[0], lista_params[1], lista_params[2], imunidade, lista_params[3], lista_params[4], lista_params[5], lista_params[6], lista_params[7], lista_params[8], lista_params[9])
 
         return jogador
     
@@ -1836,6 +1996,10 @@ class IDoente():
     pass
 
 
+def inicializaJogo():
+    pass
+
+
 if __name__ == "__main__":
     
     try:
@@ -1847,17 +2011,9 @@ if __name__ == "__main__":
         print(fonte.renderText("RPG"))
         print(fonte.renderText("The Witcher"))
 
-        console.print(
-            Panel(
-                Align.center("Digite o nome do personagem:")
-            )
-        )
-        nome = input("")
-
         opcao_jogador = menu_jogador()
 
-        jogador = JogadorFactory.criar_jogador(opcao_jogador,nome,100,200,0,0,0,0,0)
-        jogador = JogadorFactory.criar_jogador(opcao_jogador, nome, 150, 120, 13, 11, 7, 8, 11, 7, 8)
+        jogador = JogadorFactory.criar_jogador(opcao_jogador)
         opcao_profissao = menu_profissao()
 
         profissao = ProfissaoFactory.criar_profissao(opcao_profissao)
@@ -1867,9 +2023,9 @@ if __name__ == "__main__":
         jogador.aumenta_nivel_habilidade()
 
         print("\nPersonagem criado com sucesso!")
-        print("Nome:", jogador._nome)
-        print("Raça:", type(jogador).__name__) #trocar isso dps por um getter plmds -A
-        print("Profissão:", type(jogador._profissao_jogador).__name__) #trocar isso dps por um getter plmds -A
+        print("Nome:", jogador.getNome())
+        print("Raça:", type(jogador).__name__) 
+        print("Profissão:", jogador.getProfissao()) 
     except Exception as e:
         print(e)
 
