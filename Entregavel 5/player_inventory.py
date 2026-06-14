@@ -1,17 +1,23 @@
 """ Quadro de atualizações q eu tenho q fzr (-A)
--> Música via terminal pelo Pyfliglet 
--> Colocar cor no Terminal
--> Métodos de interface para funções de atacar e curar (Atacar vai dar o xp pra upar as skills)
--> Interface Gráfica
+-> Interface Gráfica (Distrinchar em 2 arquivos finais) -> Interface Gráfica e interface via Terminal
+
 -> Separar em outros arquivos
--> Jogador e Profissão estão funcionando perfeitamente
+
+-> CORRIGIR: No inicializa Jogo fazer uma interface mais bonitinha no terminal
+-> Quando pede os níveis, colocar o intervalo q o usuario pode digitar
+-> Falta um verificador em algum lugar q agr eu nn consigo me recordar, mas eu sei q falta
+-> Musica via terminal pro negócio nn ficar tão chato de se digitar e escolher as coisas
 """
+
+#-> Jogador e Profissão estão funcionando perfeitamente
+#-> Classes de interface estão funcionando perfeitamente também
 
 from abc import ABC, abstractmethod
 from pyfiglet import Figlet
 from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
+import random
 
 # =------ Excessões ------= #Tudo OK
 class ExcessaoNivelGeralInvalido(Exception):
@@ -1132,8 +1138,84 @@ class Desempregado(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+# =------ Interfaces ------=
+
+#O Personagem tem a capacidade de combater monstros
+class ICombate(ABC):
+
+    @abstractmethod
+    def atacar(self, monstro):
+        pass
+
+#O Personagem tem a capacidade de se curar
+class ICuravel(ABC):
+
+    @abstractmethod
+    def curar(self):
+        pass
+
+# =------ Monstro ------=
+
+#Representa o "alvo" do combate
+class Monstro:
+
+    def __init__(self, nome, hp, xp_recompensa):
+        self._nome = nome
+        self._hp = hp
+        self._xp_recompensa = xp_recompensa
+
+    #Métodos getters
+    def getNome(self):
+        return self._nome
+
+    def getHp(self):
+        return self._hp
+
+    def getXpRecompensa(self):
+        return self._xp_recompensa
+
+    #Métodos da classe
+    def recebeDano(self, dano):
+        self._hp = self._hp - dano
+
+        if self._hp < 0:
+            self._hp = 0
+
+        return
+
+    def estaMorto(self):
+        return self._hp <= 0
+
 #Tudo OK
-class Jogador(ABC):
+class MonstroFactory:
+
+    @staticmethod
+    def criar_monstro_aleatorio():
+
+        lista_monstros = [
+            ("Afogador", 15, 20),
+            ("Necrófago", 18, 25),
+            ("Carniçal", 20, 30),
+            ("Endriaga", 25, 35),
+            ("Alghoul", 30, 40),
+            ("Grifo", 45, 60),
+            ("Lobisomem", 40, 55),
+            ("Ekimmara", 50, 70),
+            ("Foglet", 35, 50),
+            ("Leshen", 80, 120),
+            ("Basilisco", 70, 100),
+            ("Wyvern", 60, 85),
+            ("Aracnomorfo", 40, 60),
+            ("Doppler Corrompido", 55, 80),
+            ("Fiend", 90, 130)
+        ]
+
+        nome, hp, xp = random.choice(lista_monstros)
+
+        return Monstro(nome, hp, xp)
+
+#Tudo OK
+class Jogador(ICombate, ICuravel):
 
     def __init__(self, nome="Guest", hp=0, imunidade=0, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0):
         self._profissao_jogador = None #Se comporta como se fosse um ponteiro para a classe Profissao
@@ -1189,7 +1271,7 @@ class Jogador(ABC):
 
     #Métodos setters
     def setNome(self, valor):
-        if(valor.split() == ""):
+        if(valor.strip() == ""):
             raise ExcessaoNomeJogadorInvalido()
         else:
             self._nome = valor
@@ -1257,7 +1339,7 @@ class Jogador(ABC):
 
         retorno = False
 
-        if(valor > 0 and valor < self._hp_maximo):
+        if(valor > 0 and valor <= self._hp_maximo):
             retorno = True
         
         return retorno
@@ -1360,6 +1442,55 @@ class Jogador(ABC):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
         
+        return
+
+    #Implementação da interface ICombate
+    def atacar(self, monstro):
+
+        console = Console()
+
+        dano = self._lvl_forca + self._lvl_brigar
+
+        if dano <= 0:
+            dano = 1
+
+        monstro.recebeDano(dano)
+
+        console.print(Panel(Align.center(
+            f"{self._nome} atacou {monstro.getNome()} e causou {dano} de dano!\n"
+            f"{monstro.getNome()} possui {monstro.getHp()} de HP restante."
+        ), title="⚔ Combate ⚔"))
+
+        if monstro.estaMorto():
+
+            xp_ganho = monstro.getXpRecompensa()
+
+            #Atribuição do xp que foi ganhado no nivel_geral de Jogador
+            self.setNivelGeral(self._nivel_geral + xp_ganho)
+
+             #Atribuição do xp que foi ganhado no nivel_geral de Profissao
+            if self._profissao_jogador is not None:
+                self._profissao_jogador.setNivelGeral(self._profissao_jogador.getNivelGeral() + xp_ganho)
+
+            console.print(Panel(Align.center(
+                f"{monstro.getNome()} foi derrotado!\n"
+                f"{self._nome} ganhou {xp_ganho} pontos de experiência!"
+            ), title="✦ Vitória ✦"))
+
+        return
+
+    #Implementação da interface ICuravel
+    def curar(self):
+
+        console = Console()
+
+        self.setHP(self._hp_maximo)
+
+        console.print(Panel(Align.center(
+            f"{self._nome} foi totalmente curado!\n"
+            f"HP: {self._hp}/{self._hp_maximo}"
+        ), title="✚ Cura ✚"))
+
         return
 
     @abstractmethod
@@ -2040,14 +2171,6 @@ def menu_profissao():
         
     return opcao
 
-#O Personagem tem a capacidade de combater monstros
-class ICombate():
-    pass
-
-#O Personagem tem a capacidade de se curar
-class ICuravel():
-    pass
-
 #O personagem tem a capacidade de ficar doente
 #Acho que não vai dar tempo de implementar isso
 class IDoente():
@@ -2067,31 +2190,29 @@ def inicializaJogo():
         while True:
             #Decorar isso aqui dps
             if(personagem_criado == False):
-                print("0 - Sair do Jogo") #Mudar o valor dessa opção aqui
                 print("1 - Criar Personagem")
+                print("2 - Sair do Jogo") 
             else:
-                print("0 - Sair do Jogo") #Mudar o valor dessa opção aqui
-                #No momento criar personagem só reescreve o existente
-                #print("1 - Criar Personagem") #Ver se seria melhor criar apenas 1 ou mais personagens
-                print("2 - Upar Skills de Jogador")
-                print("3 - Upar Skills de Profissao")
+                print("2 - Sair do Jogo") 
+                print("3 - Upar Skills de Jogador")
+                print("4 - Upar Skills de Profissao")
+                print("5 - Atacar Monstro")
+                print("6 - Curar Personagem")
 
             try:
                 op = int(input("Digite sua opção: "))
             except ValueError:
                 print("Digite apenas um valor inteiro!")
 
-            if((personagem_criado == False) and op >=0 and op <= 1):
+            if((personagem_criado == False) and op >= 1 and op <= 2):
                 break
-            elif((personagem_criado == True) and op >=0 and op <= 3):
+            elif((personagem_criado == True) and op >=2 and op <= 6):
                 break
             else:
                 print("Digite uma opção válida!")
 
         match op:
 
-            case 0:
-                verifica_saida = True
             case 1:
 
                 personagem_criado = True
@@ -2105,17 +2226,22 @@ def inicializaJogo():
                 profissao_jogador = ProfissaoFactory.criar_profissao(opcao_profissao)
                 obj_jogador.setProfissao(profissao_jogador)
 
+                #Teste -> Apagar dps
                 print("\nPersonagem criado com sucesso!")
                 print("Nome:", obj_jogador.getNome())
                 print("Raça:", type(obj_jogador).__name__) 
                 print("Profissão:", obj_jogador.getProfissao()) 
             case 2: 
-                obj_jogador.aumenta_nivel_habilidade()
+                verifica_saida = True
             case 3:
-                obj_jogador.getProfissao().aumenta_nivel_habilidade_profissao()
-                
+                obj_jogador.aumenta_nivel_habilidade()
             case 4:
-                pass
+                obj_jogador.getProfissao().aumenta_nivel_habilidade_profissao()
+            case 5:
+                monstro = MonstroFactory.criar_monstro_aleatorio()
+                obj_jogador.atacar(monstro)
+            case 6:
+                obj_jogador.curar()
 
     return
 
@@ -2134,5 +2260,3 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(e)
-
-    
