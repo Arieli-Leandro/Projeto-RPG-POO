@@ -1,8 +1,10 @@
 """ Quadro de atualizações q eu tenho q fzr (-A)
--> Música via terminal pelo Pyfliglet
+-> Música via terminal pelo Pyfliglet 
 -> Colocar cor no Terminal
 -> Métodos de interface para funções de atacar e curar (Atacar vai dar o xp pra upar as skills)
 -> Interface Gráfica
+-> Separar em outros arquivos
+-> Jogador e Profissão estão funcionando perfeitamente
 """
 
 from abc import ABC, abstractmethod
@@ -11,8 +13,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
 
-# =------ Excessões ------=
-
+# =------ Excessões ------= #Tudo OK
 class ExcessaoNivelGeralInvalido(Exception):
     def __str__(self):
         return f"Valor de nível geral inválido!"
@@ -37,20 +38,21 @@ class ExcessaoNomeJogadorInvalido(Exception):
     def __str__(self):
         return f"Digite um nome válido!"
 
+#Tudo OK
 class Profissao(ABC):
 
     def __init__(self, nivel_geral_profissao=0):
         self._qtd_pontos_profissao = 0 
-
-        if self._valida_atributo_construtor(nivel_geral_profissao) == True:
-            self._nivel_geral_profissao = nivel_geral_profissao
-        else:
-            self._nivel_geral_profissao = 0
+        self.setNivelGeral(nivel_geral_profissao)
 
     #método setter
     def setNivelGeral(self, valor):
-        if(valor < 0):
-            raise ExcessaoNivelGeralInvalido()
+        if(self._valida_atributo_construtor(valor) == True):
+            self._nivel_geral_profissao = valor
+        else:
+            self._nivel_geral_profissao = 0
+
+        return
         
     #método getter
     def getNivelGeral(self):
@@ -87,6 +89,7 @@ class Profissao(ABC):
     def __del__(self):
         print("Profissao deletada")
 
+#Tudo OK
 class Mago(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_lancar_feitico=0, lvl_educacao=0, lvl_resistir_magia=0, nivel_geral=0):
@@ -148,6 +151,8 @@ class Mago(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -162,7 +167,7 @@ class Mago(Profissao):
                             "2 - Upar Habilidade de: Educação \n"
                             "3 - Upar Habilidade de: Lancar Feitico \n"
                             "4 - Upar Habilidade de: Resistir Magia"
-                        )),title="❇ Subir de LVL: Skill Profissão ❇")
+                        ),title="❇ Subir de LVL: Skill Profissão ❇"))
                 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -209,6 +214,7 @@ class Mago(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Bardo(Profissao):
 
     def __init__(self, lvl_etiqueta_social=0, lvl_ludibriar=0, lvl_sabedoria_das_ruas=0, nivel_geral=0):
@@ -258,6 +264,8 @@ class Bardo(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -269,7 +277,7 @@ class Bardo(Profissao):
                     "1 - Upar Habilidade de: Etiqueta Social \n"
                     "2 - Upar Habilidade de: Ludibriar \n"
                     "3 - Upar Habilidade de: Sabedoria das Ruas"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -308,7 +316,7 @@ class Bardo(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
-#fazer os getters e setters daqui tbbm
+#Tudo OK
 class Artesao(Profissao):
 
     def __init__(self, lvl_educacao=0, lvl_criacao=0, lvl_negociacao=0, lvl_fisico=0, nivel_geral=0):
@@ -369,6 +377,8 @@ class Artesao(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -381,7 +391,7 @@ class Artesao(Profissao):
                     "2 - Upar Habilidade de: Criação \n"
                     "3 - Upar Habilidade de: Negociação \n"
                     "4 - Upar Habilidade de: Físico"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -428,6 +438,7 @@ class Artesao(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Criminoso(Profissao):
 
     def __init__(self, lvl_arrombar_fechaduras=0, lvl_falsificacao=0, lvl_atletismo=0, lvl_sabedoria_das_ruas=0, nivel_geral=0):
@@ -489,6 +500,8 @@ class Criminoso(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -502,7 +515,7 @@ class Criminoso(Profissao):
                     "2 - Upar Habilidade de: Falsificacao \n"
                     "3 - Upar Habilidade de: Atletismo \n"
                     "4 - Upar Habilidade de: Sabedoria das Ruas"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -548,6 +561,7 @@ class Criminoso(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Doutor(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_coragem=0, lvl_alquimia=0, nivel_geral=0):
@@ -609,6 +623,8 @@ class Doutor(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -621,7 +637,7 @@ class Doutor(Profissao):
                     "2 - Upar Habilidade de: Coragem \n"
                     "3 - Upar Habilidade de: Alquimia \n"
                     "4 - Upar Habilidade de: Carisma"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -668,6 +684,7 @@ class Doutor(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Cavaleiro(Profissao):
 
     def __init__(self, lvl_coragem=0, lvl_intimidacao=0, lvl_sobrevivencia=0, lvl_esquivar=0, nivel_geral=0):
@@ -729,6 +746,8 @@ class Cavaleiro(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -741,7 +760,7 @@ class Cavaleiro(Profissao):
                     "2 - Upar Habilidade de: Intimidação \n"
                     "3 - Upar Habilidade de: Sobrevivência \n"
                     "4 - Upar Habilidade de: Esquivar"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -787,6 +806,7 @@ class Cavaleiro(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Comerciante(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_negocios=0, lvl_persuasao=0, nivel_geral=0):
@@ -848,6 +868,8 @@ class Comerciante(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -860,7 +882,7 @@ class Comerciante(Profissao):
                     "2 - Upar Habilidade de: Educação \n"
                     "3 - Upar Habilidade de: Negócios \n"
                     "4 - Upar Habilidade de: Persuasão"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -906,6 +928,7 @@ class Comerciante(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Sacerdote(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_coragem=0, lvl_ensinar=0, lvl_lancar_feitico=0, nivel_geral=0):
@@ -967,6 +990,8 @@ class Sacerdote(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -979,7 +1004,7 @@ class Sacerdote(Profissao):
                     "2 - Upar Habilidade de: Coragem \n"
                     "3 - Upar Habilidade de: Ensinar \n"
                     "4 - Upar Habilidade de:  Lançar Feitiço"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -1025,6 +1050,7 @@ class Sacerdote(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Desempregado(Profissao):
 
     def __init__(self, lvl_sobrevivencia=0, lvl_consciencia=0, nivel_geral=0):
@@ -1062,6 +1088,8 @@ class Desempregado(Profissao):
 
     def aumenta_nivel_habilidade_profissao(self):
 
+        self.transforma_pontos_experiencia()
+
         console = Console()
 
         opcao = 0
@@ -1074,7 +1102,7 @@ class Desempregado(Profissao):
                     "2 - Upar Habilidade de: Consciência \n"
                     "3 - Upar Habilidade de: Ensinar \n"
                     "4 - Upar Habilidade de:  Lancar Feitiço"
-                )),title="❇ Subir de LVL: Skill Profissão ❇")
+                ),title="❇ Subir de LVL: Skill Profissão ❇"))
 
                 try:
                     opcao = int(input("Digite uma opção: "))
@@ -1104,6 +1132,7 @@ class Desempregado(Profissao):
         else:
             raise ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Jogador(ABC):
 
     def __init__(self, nome="Guest", hp=0, imunidade=0, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0):
@@ -1146,6 +1175,10 @@ class Jogador(ABC):
     
     def getProfissao(self):
         return self._profissao_jogador
+    
+    def setProfissao(self, valor):
+        self._profissao_jogador = valor
+        return
     
     #Só pra dps fazer uma função que mostre qts pontos o jogador tem
     def getQtdPontos(self):
@@ -1336,6 +1369,7 @@ class Jogador(ABC):
     def __del__(self):
         print("Removendo os dados do jogador: " + self._nome)
 
+#Tudo OK
 class Humano(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade=5, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
@@ -1445,6 +1479,7 @@ class Humano(Jogador):
         
         return
 
+#Tudo OK
 class Bruxo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade = 13, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
@@ -1513,6 +1548,7 @@ class Bruxo(Jogador):
         else:
             ExcessaoPontosInsuficientesSubirNivel()
 
+#Tudo OK
 class Anao(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade=7, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_armadura=0, lvl_deducao=0):
@@ -1598,6 +1634,7 @@ class Anao(Jogador):
             raise ExcessaoPontosInsuficientesSubirNivel()
         return
 
+#Tudo OK
 class Elfo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=8, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
@@ -1711,6 +1748,7 @@ class ExcessaoNivelInvalido(Exception):
         return f"Valor de nível Inválido, Mínimo 0 e Máximo 13!"
 
 #Dependendo do tipo de personagem, ele entra na função e pede os parâmetros necessários para a criação naquele jogador
+#Tudo OK
 def recebeParametrosJogador(tipo):
 
     console = Console()
@@ -1860,6 +1898,8 @@ def recebeParametrosJogador(tipo):
 
     return lista_parametros_tipo
 
+#O jogador pode começar com níveis, menos em profissão, profissão ele começa apenas com o lvl geral de profissao
+#Tudo OK
 class JogadorFactory:
 
     @staticmethod
@@ -1885,15 +1925,30 @@ class JogadorFactory:
 
         return jogador
     
+#Tudo OK
+def recebeParametrosProfissao():
+
+    console.print(
+        Panel(
+            Align.center(
+                "Digite o valor de nível geral de profissão: "
+            ),title= "Experiência Profissional"))   #Decorar isso aqui dps
+    try:
+        nivel_geral = int(input(""))  
+    except ValueError:
+        print("Digite apenas números inteiros!")
+
+    return nivel_geral
+    
+#Tudo OK
 class ProfissaoFactory:
 
     @staticmethod
-    def criar_profissao(tipo, nivel_geral=0):
-
-        #A ideia é q em profissão o jogador fazendo as tasks ele aumente de nível para upar
-        #tenho q fazer o menu na main, e jogar pra verificar antes de entrar no método fabric (mesmo q na de cima)
+    def criar_profissao(tipo):
 
         profissao = None
+
+        nivel_geral = recebeParametrosProfissao()
 
         match tipo:
 
@@ -1918,6 +1973,7 @@ class ProfissaoFactory:
 
         return profissao
 
+#Tudo OK
 def menu_jogador():
 
     console = Console()
@@ -1948,6 +2004,7 @@ def menu_jogador():
 
     return opcao
 
+#Tudo OK
 def menu_profissao():
 
     console = Console()
@@ -1992,13 +2049,76 @@ class ICuravel():
     pass
 
 #O personagem tem a capacidade de ficar doente
+#Acho que não vai dar tempo de implementar isso
 class IDoente():
     pass
 
-
+#Decorar isso aqui dps (melhorar visualmente via terminal)
 def inicializaJogo():
-    pass
+    # -> Como se fosse um gerenciador do jogo
 
+    personagem_criado = False
+
+    verifica_saida = False
+
+    #Distrinchar isso em menu e em partes que vão chamar outras para funcionar
+    while verifica_saida == False:
+
+        while True:
+            #Decorar isso aqui dps
+            if(personagem_criado == False):
+                print("0 - Sair do Jogo") #Mudar o valor dessa opção aqui
+                print("1 - Criar Personagem")
+            else:
+                print("0 - Sair do Jogo") #Mudar o valor dessa opção aqui
+                #No momento criar personagem só reescreve o existente
+                #print("1 - Criar Personagem") #Ver se seria melhor criar apenas 1 ou mais personagens
+                print("2 - Upar Skills de Jogador")
+                print("3 - Upar Skills de Profissao")
+
+            try:
+                op = int(input("Digite sua opção: "))
+            except ValueError:
+                print("Digite apenas um valor inteiro!")
+
+            if((personagem_criado == False) and op >=0 and op <= 1):
+                break
+            elif((personagem_criado == True) and op >=0 and op <= 3):
+                break
+            else:
+                print("Digite uma opção válida!")
+
+        match op:
+
+            case 0:
+                verifica_saida = True
+            case 1:
+
+                personagem_criado = True
+
+                opcao_jogador = menu_jogador()
+                #Criando o objeto jogador em si
+                obj_jogador = JogadorFactory.criar_jogador(opcao_jogador)
+
+                opcao_profissao = menu_profissao()
+                #Criando a profissao do jogador
+                profissao_jogador = ProfissaoFactory.criar_profissao(opcao_profissao)
+                obj_jogador.setProfissao(profissao_jogador)
+
+                print("\nPersonagem criado com sucesso!")
+                print("Nome:", obj_jogador.getNome())
+                print("Raça:", type(obj_jogador).__name__) 
+                print("Profissão:", obj_jogador.getProfissao()) 
+            case 2: 
+                obj_jogador.aumenta_nivel_habilidade()
+            case 3:
+                #No caso, não está funcionando pq precisamos de uma função que também recebe parâmetros assim como na de jogador
+                obj_jogador.getProfissao().aumenta_nivel_habilidade_profissao()
+                
+            case 4:
+                pass
+
+    return
 
 if __name__ == "__main__":
     
@@ -2011,21 +2131,8 @@ if __name__ == "__main__":
         print(fonte.renderText("RPG"))
         print(fonte.renderText("The Witcher"))
 
-        opcao_jogador = menu_jogador()
+        inicializaJogo()
 
-        jogador = JogadorFactory.criar_jogador(opcao_jogador)
-        opcao_profissao = menu_profissao()
-
-        profissao = ProfissaoFactory.criar_profissao(opcao_profissao)
-
-        jogador._profissao_jogador = profissao
-
-        jogador.aumenta_nivel_habilidade()
-
-        print("\nPersonagem criado com sucesso!")
-        print("Nome:", jogador.getNome())
-        print("Raça:", type(jogador).__name__) 
-        print("Profissão:", jogador.getProfissao()) 
     except Exception as e:
         print(e)
 
