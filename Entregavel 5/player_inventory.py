@@ -2112,7 +2112,6 @@ def inicializaJogo():
             case 2: 
                 obj_jogador.aumenta_nivel_habilidade()
             case 3:
-                #No caso, não está funcionando pq precisamos de uma função que também recebe parâmetros assim como na de jogador
                 obj_jogador.getProfissao().aumenta_nivel_habilidade_profissao()
                 
             case 4:
