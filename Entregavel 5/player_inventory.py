@@ -1,11 +1,7 @@
 """ Quadro de atualizações q eu tenho q fzr (-A)
 -> Interface Gráfica (Distrinchar em 2 arquivos finais) -> Interface Gráfica e interface via Terminal
-
+-> fazer com que dependendo da profissão, ele possa usar na batalha
 -> Separar em outros arquivos
-
--> CORRIGIR: No inicializa Jogo fazer uma interface mais bonitinha no terminal
--> Quando pede os níveis, colocar o intervalo q o usuario pode digitar
--> Falta um verificador em algum lugar q agr eu nn consigo me recordar, mas eu sei q falta
 -> Musica via terminal pro negócio nn ficar tão chato de se digitar e escolher as coisas
 """
 
@@ -43,6 +39,10 @@ class ExcessaoOpcaoInvalida(Exception):
 class ExcessaoNomeJogadorInvalido(Exception):
     def __str__(self):
         return f"Digite um nome válido!"
+    
+class ExcessaoJogadorSemVida(Exception):
+    def __str__(self):
+        return f"O Jogador está sem vida!"
 
 #Tudo OK
 class Profissao(ABC):
@@ -1188,6 +1188,7 @@ class Monstro:
 
 #Tudo OK
 class MonstroFactory:
+    #Mostrar o hp restante do usuário
 
     @staticmethod
     def criar_monstro_aleatorio():
@@ -1447,40 +1448,54 @@ class Jogador(ICombate, ICuravel):
     #Implementação da interface ICombate
     def atacar(self, monstro):
 
-        console = Console()
+        #ao atacar o personagem tbm recebe dano
 
-        dano = self._lvl_forca + self._lvl_brigar
+        if(self.getHp() > 0):
 
-        if dano <= 0:
-            dano = 1
+            console = Console()
 
-        monstro.recebeDano(dano)
+            dano = self._lvl_forca + self._lvl_brigar
+            dano_recebido = 0.5 * monstro.getXpRecompensa()
 
-        console.print(Panel(Align.center(
-            f"{self._nome} atacou {monstro.getNome()} e causou {dano} de dano!\n"
-            f"{monstro.getNome()} possui {monstro.getHp()} de HP restante."
-        ), title="⚔ Combate ⚔"))
+            if dano <= 0:
+                dano = 1
 
-        if monstro.estaMorto():
+            monstro.recebeDano(dano)
 
-            xp_ganho = monstro.getXpRecompensa()
-
-            #Atribuição do xp que foi ganhado no nivel_geral de Jogador
-            self.setNivelGeral(self._nivel_geral + xp_ganho)
-
-             #Atribuição do xp que foi ganhado no nivel_geral de Profissao
-            if self._profissao_jogador is not None:
-                self._profissao_jogador.setNivelGeral(self._profissao_jogador.getNivelGeral() + xp_ganho)
+            #fazendo o personagem receber o dano
+            valor_vida = self.getHp() - dano_recebido
+            self.setHP(valor_vida)
 
             console.print(Panel(Align.center(
-                f"{monstro.getNome()} foi derrotado!\n"
-                f"{self._nome} ganhou {xp_ganho} pontos de experiência!"
-            ), title="✦ Vitória ✦"))
+                f"{self._nome} atacou {monstro.getNome()} e causou {dano} de dano!\n"
+                f"{monstro.getNome()} atacou {self._nome} e causou {dano_recebido} de dano!\n"
+                f"{monstro.getNome()} possui {monstro.getHp()} de HP restante."
+            ), title="⚔ Combate ⚔"))
+
+            if monstro.estaMorto():
+
+                xp_ganho = monstro.getXpRecompensa()
+
+                #Atribuição do xp que foi ganhado no nivel_geral de Jogador
+                self.setNivelGeral(self._nivel_geral + xp_ganho)
+
+                #Atribuição do xp que foi ganhado no nivel_geral de Profissao
+                if self._profissao_jogador is not None:
+                    self._profissao_jogador.setNivelGeral(self._profissao_jogador.getNivelGeral() + xp_ganho)
+
+                console.print(Panel(Align.center(
+                    f"{monstro.getNome()} foi derrotado!\n"
+                    f"{self._nome} ganhou {xp_ganho} pontos de experiência!"
+                ), title="✦ Vitória ✦"))
+        else:
+            raise ExcessaoJogadorSemVida()
 
         return
 
     #Implementação da interface ICuravel
     def curar(self):
+
+        #Fazer ele realmente se curar
 
         console = Console()
 
@@ -1886,33 +1901,33 @@ def recebeParametrosJogador(tipo):
 
     lista_strings = [
         ("Digite o nome do personagem: ", str, None, None),
-        ("Digite o hp do personagem: ", int, 0, 300),
-        ("Digite o nível geral do personagem: ", int, 0, 200),
-        ("Digite o nível de briga do personagem: ", int, 0, 13),
-        ("Digite o nível de apostar do personagem: ", int, 0, 13),
-        ("Digite o nível de força do personagem: ", int, 0, 13),
-        ("Digite o nível de inteligência do personagem: ", int, 0, 13)
+        ("Digite o hp do personagem: 0-300", int, 0, 300),
+        ("Digite o nível geral do personagem: 0-200", int, 0, 200),
+        ("Digite o nível de briga do personagem: 0-13", int, 0, 13),
+        ("Digite o nível de apostar do personagem: 0-13", int, 0, 13),
+        ("Digite o nível de força do personagem: 0-13", int, 0, 13),
+        ("Digite o nível de inteligência do personagem: 0-13", int, 0, 13)
     ]
 
     lista_strings_humano = [
-        ("Digite o nível de Sedução do personagem: ", int, 0, 13),
-        ("Digite o nível de Persuasão do personagem: ", int, 0, 13),
-        ("Digite o nível de Teimosia do personagem: ", int, 0, 13)
+        ("Digite o nível de Sedução do personagem: 0-13", int, 0, 13),
+        ("Digite o nível de Persuasão do personagem: 0-13", int, 0, 13),
+        ("Digite o nível de Teimosia do personagem: 0-13", int, 0, 13)
     ]
 
     lista_strings_bruxo = [
-        ("Digite o nível de Reflexos Relâmpagos do personagem: ", int, 0, 13)
+        ("Digite o nível de Reflexos Relâmpagos do personagem: 0-13", int, 0, 13)
     ]
 
     lista_strings_anao = [
-        ("Digite o nível de Armadura do persoagem: ", int, 0, 13),
-        ("Digite o nível de Dedução do personagem: ", int, 0, 13)
+        ("Digite o nível de Armadura do persoagem: 0-13", int, 0, 13),
+        ("Digite o nível de Dedução do personagem: 0-13", int, 0, 13)
     ]
 
     lista_strings_elfo = [
-        ("Digite o nível de Artesanato do personagem: ", int, 0, 13),
-        ("Digite o nível em Arcos do personagem: ", int, 0, 13),
-        ("Digite o nível em Sintonia da Natureza do personagem: ", int, 0, 13)
+        ("Digite o nível de Artesanato do personagem: 0-13", int, 0, 13),
+        ("Digite o nível em Arcos do personagem: 0-13", int, 0, 13),
+        ("Digite o nível em Sintonia da Natureza do personagem: 0-13", int, 0, 13)
     ]
 
     #Aqui vai ficar guardado todas as variáveis e elas vão ser retornadas para a classe Factory para poder criar um personagem naquele tipo
@@ -2059,15 +2074,18 @@ class JogadorFactory:
 #Tudo OK
 def recebeParametrosProfissao():
 
-    console.print(
-        Panel(
-            Align.center(
-                "Digite o valor de nível geral de profissão: "
-            ),title= "Experiência Profissional"))   #Decorar isso aqui dps
-    try:
-        nivel_geral = int(input(""))  
-    except ValueError:
-        print("Digite apenas números inteiros!")
+    console.print(Panel(Align.center("Digite o valor de nível geral de profissão: 0-200")))
+    
+    while True:
+        try:
+            nivel_geral = int(input(""))  
+        except ValueError:
+            print("Digite apenas números inteiros!")
+
+        if(nivel_geral >= 0 and nivel_geral <= 200):
+            break
+        else:
+            console.print(Panel(Align.center("Digite o valor de nível geral de profissão: 0-200")))
 
     return nivel_geral
     
@@ -2171,14 +2189,10 @@ def menu_profissao():
         
     return opcao
 
-#O personagem tem a capacidade de ficar doente
-#Acho que não vai dar tempo de implementar isso
-class IDoente():
-    pass
-
-#Decorar isso aqui dps (melhorar visualmente via terminal)
+ # -> Como se fosse um gerenciador do jogo
 def inicializaJogo():
-    # -> Como se fosse um gerenciador do jogo
+
+    console = Console()
 
     personagem_criado = False
 
@@ -2188,16 +2202,23 @@ def inicializaJogo():
     while verifica_saida == False:
 
         while True:
-            #Decorar isso aqui dps
+
             if(personagem_criado == False):
-                print("1 - Criar Personagem")
-                print("2 - Sair do Jogo") 
+
+                console.print(Panel(Align.center(
+                    "1 - Criar Personagem \n"
+                    "2 - Sair do Jogo"
+                )))
             else:
-                print("2 - Sair do Jogo") 
-                print("3 - Upar Skills de Jogador")
-                print("4 - Upar Skills de Profissao")
-                print("5 - Atacar Monstro")
-                print("6 - Curar Personagem")
+
+                console.print(Panel(Align.center(
+                    "2 - Sair do Jogo \n"
+                    "3 - Upar Skills de Jogador \n"
+                    "4 - Upar Skills de Profissão \n"
+                    "5 - Atacar Monstro \n"
+                    "6 - Curar Personagem"
+
+                )))
 
             try:
                 op = int(input("Digite sua opção: "))
@@ -2226,11 +2247,6 @@ def inicializaJogo():
                 profissao_jogador = ProfissaoFactory.criar_profissao(opcao_profissao)
                 obj_jogador.setProfissao(profissao_jogador)
 
-                #Teste -> Apagar dps
-                print("\nPersonagem criado com sucesso!")
-                print("Nome:", obj_jogador.getNome())
-                print("Raça:", type(obj_jogador).__name__) 
-                print("Profissão:", obj_jogador.getProfissao()) 
             case 2: 
                 verifica_saida = True
             case 3:
@@ -2251,12 +2267,8 @@ if __name__ == "__main__":
         
         console = Console()
 
-        fonte = Figlet(font="starwars")
-
-        print(fonte.renderText("RPG"))
-        print(fonte.renderText("The Witcher"))
+        console.print(Panel(Align.center("\n The Witcher - RPG \n")))
 
         inicializaJogo()
-
     except Exception as e:
         print(e)
