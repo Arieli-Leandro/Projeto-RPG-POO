@@ -1,13 +1,3 @@
-""" Quadro de atualizações q eu tenho q fzr (-A)
--> Interface Gráfica (Distrinchar em 2 arquivos finais) -> Interface Gráfica e interface via Terminal
--> Separar em outros arquivos
-
--> Musica via terminal pro negócio nn ficar tão chato de se digitar e escolher as coisas
-"""
-
-#-> Jogador e Profissão estão funcionando perfeitamente
-#-> Classes de interface estão funcionando perfeitamente também
-
 from abc import ABC, abstractmethod
 import time
 import pygame
@@ -16,19 +6,7 @@ from rich.panel import Panel
 from rich.align import Align
 import random
 
-# =------ Excessões ------= #Tudo OK
-class ExcessaoNivelGeralInvalido(Exception):
-    def __str__(self):
-        return f"Valor de nível geral inválido!"
-    
-class ExcessaoNivelMaximo(Exception):
-    def __str__(self):
-        return f"Seu personagem já está com essa skill no nível Máximo!"
-    
-class ExcessaoPontosInsuficientesSubirNivel(Exception):
-    def __str__(self):
-        return f"Seu personagem não tem pontos suficientes para subir de nível!"
-    
+# =------ Excessões ------= 
 class ExcessaoTipoOpcaoInvalido(Exception):
     def __str__(self):
         return f"Digite um número inteiro!"
@@ -41,11 +19,6 @@ class ExcessaoNomeJogadorInvalido(Exception):
     def __str__(self):
         return f"Digite um nome válido!"
     
-class ExcessaoJogadorSemVida(Exception):
-    def __str__(self):
-        return f"O Jogador está sem vida!"
-
-#Tudo OK
 class Profissao(ABC):
 
     def __init__(self, nivel_geral_profissao=0):
@@ -64,6 +37,9 @@ class Profissao(ABC):
     #método getter
     def getNivelGeral(self):
         return self._nivel_geral_profissao
+
+    def getNomeProfissao(self):
+        return self.__class__.__name__
 
     def _valida_atributo_construtor(self, valor):
         retorno = False
@@ -96,7 +72,6 @@ class Profissao(ABC):
     def __del__(self):
         print("Profissao deletada")
 
-#Tudo OK
 class Mago(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_lancar_feitico=0, lvl_educacao=0, lvl_resistir_magia=0, nivel_geral=0):
@@ -192,7 +167,7 @@ class Mago(Profissao):
                     self.__lvl_criar_ritual = self.__lvl_criar_ritual + 1
                     print("Subiu de nível em Criar Ritual!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Educacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -200,7 +175,7 @@ class Mago(Profissao):
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("Subiu de nível em Educação!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
                 
             elif opcao == 3:  # Lancar Feitico
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -208,7 +183,7 @@ class Mago(Profissao):
                     self.__lvl_lancar_feitico = self.__lvl_lancar_feitico + 1
                     print("Subiu de nível em Lancar Feitico!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 4:  # Resistir Magia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -216,12 +191,11 @@ class Mago(Profissao):
                     self.__lvl_resistir_magia = self.__lvl_resistir_magia + 1
                     print("Subiu de nível em Resistir a Magia!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Bardo(Profissao):
 
     def __init__(self, lvl_etiqueta_social=0, lvl_ludibriar=0, lvl_sabedoria_das_ruas=0, nivel_geral=0):
@@ -302,7 +276,7 @@ class Bardo(Profissao):
                     self.__lvl_etiqueta_social = self.__lvl_etiqueta_social + 1
                     print("Subiu de nível em Etiqueta Social!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Ludibriar
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -310,7 +284,7 @@ class Bardo(Profissao):
                     self.__lvl_ludibriar = self.__lvl_ludibriar + 1
                     print("Subiu de nível em Ludibriar!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 3:  # Sabedoria das Ruas
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -318,12 +292,11 @@ class Bardo(Profissao):
                     self.__lvl_sabedoria_das_ruas = self.__lvl_sabedoria_das_ruas + 1
                     print("Subiu de nível em Sabedoria das Ruas!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Artesao(Profissao):
 
     def __init__(self, lvl_educacao=0, lvl_criacao=0, lvl_negociacao=0, lvl_fisico=0, nivel_geral=0):
@@ -416,7 +389,7 @@ class Artesao(Profissao):
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("Subiu de nível em Educação!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Criacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -424,7 +397,7 @@ class Artesao(Profissao):
                     self.__lvl_criacao = self.__lvl_criacao + 1
                     print("Subiu de nível em Criação!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 3:  # Negociacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -432,7 +405,7 @@ class Artesao(Profissao):
                     self.__lvl_negociacao = self.__lvl_negociacao + 1
                     print("Subiu de nível em Negociação!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 4:  # Fisico
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -440,12 +413,11 @@ class Artesao(Profissao):
                     self.__lvl_fisico = self.__lvl_fisico + 1
                     print("Subiu de nível em Físico!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Criminoso(Profissao):
 
     def __init__(self, lvl_arrombar_fechaduras=0, lvl_falsificacao=0, lvl_atletismo=0, lvl_sabedoria_das_ruas=0, nivel_geral=0):
@@ -540,7 +512,7 @@ class Criminoso(Profissao):
                     self.__lvl_arrombar_fechaduras = self.__lvl_arrombar_fechaduras + 1
                     print("Subiu de nível em Arrombar Fechaduras!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Falsificacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -548,7 +520,7 @@ class Criminoso(Profissao):
                     self.__lvl_falsificacao = self.__lvl_falsificacao + 1
                     print("Subiu de nível em Falsificação!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 3:  # Atletismo
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -556,7 +528,7 @@ class Criminoso(Profissao):
                     self.__lvl_atletismo = self.__lvl_atletismo + 1
                     print("Subiu de nível em Atletismo!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 4:  # Sabedoria das Ruas
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -564,11 +536,10 @@ class Criminoso(Profissao):
                     self.__lvl_sabedoria_das_ruas = self.__lvl_sabedoria_das_ruas + 1
                     print("Subiu de nível em Sabedoria das Ruas!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Doutor(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_coragem=0, lvl_alquimia=0, nivel_geral=0):
@@ -662,7 +633,7 @@ class Doutor(Profissao):
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("Subiu de nível em Educação!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Coragem
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -670,7 +641,7 @@ class Doutor(Profissao):
                     self.__lvl_coragem = self.__lvl_coragem + 1
                     print("Subiu de nível em Coragem!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 3:  # Alquimia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -678,7 +649,7 @@ class Doutor(Profissao):
                     self.__lvl_alquimia = self.__lvl_alquimia + 1
                     print("Subiu de nível em Alquimia!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
                 
             elif opcao == 4:  # Carisma
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -686,12 +657,11 @@ class Doutor(Profissao):
                     self.__lvl_carisma = self.__lvl_carisma + 1
                     print("Subiu de nível em Carisma!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Cavaleiro(Profissao):
 
     def __init__(self, lvl_coragem=0, lvl_intimidacao=0, lvl_sobrevivencia=0, lvl_esquivar=0, nivel_geral=0):
@@ -785,7 +755,7 @@ class Cavaleiro(Profissao):
                     self.__lvl_coragem = self.__lvl_coragem + 1
                     print("Subiu de nível em Coragem!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Intimidacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -793,7 +763,7 @@ class Cavaleiro(Profissao):
                     self.__lvl_intimidacao = self.__lvl_intimidacao + 1
                     print("Subiu de nível em Intimidacao!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 3:  # Sobrevivencia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -801,7 +771,7 @@ class Cavaleiro(Profissao):
                     self.__lvl_sobrevivencia = self.__lvl_sobrevivencia + 1
                     print("Subiu de nível em Sobrevivência!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 4:  # Esquivar
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -809,11 +779,10 @@ class Cavaleiro(Profissao):
                     self.__lvl_esquivar = self.__lvl_esquivar + 1
                     print("Subiu de nível em Esquivar!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Comerciante(Profissao):
 
     def __init__(self, lvl_carisma=0, lvl_educacao=0, lvl_negocios=0, lvl_persuasao=0, nivel_geral=0):
@@ -907,7 +876,7 @@ class Comerciante(Profissao):
                     self.__lvl_carisma = self.__lvl_carisma + 1
                     print("Subiu de nível em Carisma!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Educacao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -915,7 +884,7 @@ class Comerciante(Profissao):
                     self.__lvl_educacao = self.__lvl_educacao + 1
                     print("Subiu de nível em Educação!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 3:  # Negocios
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -923,7 +892,7 @@ class Comerciante(Profissao):
                     self.__lvl_negocios = self.__lvl_negocios + 1
                     print("Subiu de nível em Negócios!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 4:  # Persuasao
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -931,11 +900,10 @@ class Comerciante(Profissao):
                     self.__lvl_persuasao = self.__lvl_persuasao + 1
                     print("Subiu de nível em Persuasão!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Sacerdote(Profissao):
 
     def __init__(self, lvl_criar_ritual=0, lvl_coragem=0, lvl_ensinar=0, lvl_lancar_feitico=0, nivel_geral=0):
@@ -1029,7 +997,7 @@ class Sacerdote(Profissao):
                     self.__lvl_criar_ritual = self.__lvl_criar_ritual + 1
                     print("Subiu de nível em Criar Ritual!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Coragem
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -1037,7 +1005,7 @@ class Sacerdote(Profissao):
                     self.__lvl_coragem = self.__lvl_coragem + 1
                     print("Subiu de nível em Coragem!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 3:  # Ensinar
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -1045,7 +1013,7 @@ class Sacerdote(Profissao):
                     self.__lvl_ensinar = self.__lvl_ensinar + 1
                     print("Subiu de nível em Ensinar!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 4:  # Lancar Feitico
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -1053,11 +1021,10 @@ class Sacerdote(Profissao):
                     self.__lvl_lancar_feitico = self.__lvl_lancar_feitico + 1
                     print("Subiu de nível em Lançar Feitiço!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
-#Tudo OK
 class Desempregado(Profissao):
 
     def __init__(self, lvl_sobrevivencia=0, lvl_consciencia=0, nivel_geral=0):
@@ -1127,7 +1094,7 @@ class Desempregado(Profissao):
                     self.__lvl_sobrevivencia = self.__lvl_sobrevivencia + 1
                     print("Subiu de nível em Sobrevivência!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Consciencia
                 self._qtd_pontos_profissao = self._qtd_pontos_profissao - 1
@@ -1135,20 +1102,18 @@ class Desempregado(Profissao):
                     self.__lvl_consciencia = self.__lvl_consciencia + 1
                     print("Subiu de nível em Consciência!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
 
 # =------ Interfaces ------=
 
-#O Personagem tem a capacidade de combater monstros
 class ICombate(ABC):
 
     @abstractmethod
     def atacar(self, monstro):
         pass
 
-#O Personagem tem a capacidade de se curar
 class ICuravel(ABC):
 
     @abstractmethod
@@ -1157,7 +1122,6 @@ class ICuravel(ABC):
 
 # =------ Monstro ------=
 
-#Representa o "alvo" do combate
 class Monstro:
 
     def __init__(self, nome, hp, xp_recompensa):
@@ -1187,9 +1151,7 @@ class Monstro:
     def estaMorto(self):
         return self._hp <= 0
 
-#Tudo OK
 class MonstroFactory:
-    #Mostrar o hp restante do usuário
 
     @staticmethod
     def criar_monstro_aleatorio():
@@ -1216,11 +1178,10 @@ class MonstroFactory:
 
         return Monstro(nome, hp, xp)
 
-#Tudo OK
 class Jogador(ICombate, ICuravel):
 
     def __init__(self, nome="Guest", hp=0, imunidade=0, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0):
-        self._profissao_jogador = None #Se comporta como se fosse um ponteiro para a classe Profissao
+        self._profissao_jogador = None 
         self._hp_maximo = 300
         self._qtd_pontos = 0  
         self.setNome(nome)
@@ -1235,6 +1196,9 @@ class Jogador(ICombate, ICuravel):
     #Métodos getters
     def getNivelGeral(self):
         return self._nivel_geral
+    
+    def getNomeRaca(self):
+        return self.__class__.__name__
     
     def getHp(self):
         return self._hp
@@ -1395,7 +1359,7 @@ class Jogador(ICombate, ICuravel):
                     "2 - Upar Habilidade de: Brigar \n"
                     "3 - Upar Habilidade de: Forca \n"
                     "4 - Upar Habilidade de: Inteligencia \n"
-                    "5 - Não Upar Habilidade Básica"
+                    "5 - Não Upar Habilidade Básica\\Ir para Habilidades Específicas"
                 ),title="❇ Subir de LVL: Habilidades Básicas ❇"))
                 
                 try:
@@ -1414,7 +1378,7 @@ class Jogador(ICombate, ICuravel):
                     self._lvl_apostar = self._lvl_apostar + 1
                     print(self._nome + " Subiu de nível em Aposta!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 2:  # Brigar
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1422,7 +1386,7 @@ class Jogador(ICombate, ICuravel):
                     self._lvl_brigar = self._lvl_brigar + 1
                     print(self._nome + " Subiu de nível em Brigar!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
             
             elif opcao == 3:  # Forca
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1430,7 +1394,7 @@ class Jogador(ICombate, ICuravel):
                     self._lvl_forca = self._lvl_forca + 1
                     print(self._nome + " Subiu de nível em Força!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 4:  # Inteligencia
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1438,18 +1402,16 @@ class Jogador(ICombate, ICuravel):
                     self._lvl_inteligencia = self._lvl_inteligencia + 1
                     print(self._nome + " Subiu de nível em Inteligência!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
             elif opcao == 5:  # Não upar habilidade basica
                 pass
         else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+            print("Seu personagem não tem pontos suficientes para subir de nível!")
         
         return
 
     #Implementação da interface ICombate
     def atacar(self, monstro):
-
-        #ao atacar o personagem tbm recebe dano
 
         if(self.getHp() > 0):
 
@@ -1496,8 +1458,6 @@ class Jogador(ICombate, ICuravel):
     #Implementação da interface ICuravel
     def curar(self):
 
-        #Fazer ele realmente se curar
-
         console = Console()
 
         self.setHP(self._hp_maximo)
@@ -1516,7 +1476,6 @@ class Jogador(ICombate, ICuravel):
     def __del__(self):
         print("Removendo os dados do jogador: " + self._nome)
 
-#Tudo OK
 class Humano(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade=5, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_seducao=0, lvl_persuasao=0, lvl_teimosia=0):
@@ -1602,7 +1561,7 @@ class Humano(Jogador):
                     self.__lvl_seducao = self.__lvl_seducao + 1
                     print(self._nome + " Subiu de nível em Sedução!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1610,7 +1569,7 @@ class Humano(Jogador):
                     self.__lvl_persuasao = self.__lvl_persuasao + 1
                     print(self._nome + " Subiu de nível em Persuasão!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 8:
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1618,15 +1577,12 @@ class Humano(Jogador):
                     self.__lvl_teimosia = self.__lvl_teimosia + 1
                     print(self._nome + " Subiu de nível em Teimosia!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
             elif opcao == 9:
                 pass
-        else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
         
         return
 
-#Tudo OK
 class Bruxo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade = 13, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_reflexos_relampagos=0):
@@ -1688,14 +1644,12 @@ class Bruxo(Jogador):
                     self.__lvl_reflexos_relampagos = self.__lvl_reflexos_relampagos + 1
                     print(self._nome + " Subiu de nível em Reflexos Relâmpagos!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
             elif opcao == 7:
                 pass
-                
-        else:
-            ExcessaoPontosInsuficientesSubirNivel()
 
-#Tudo OK
+        return
+
 class Anao(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, imunidade=7, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, lvl_armadura=0, lvl_deducao=0):
@@ -1766,7 +1720,7 @@ class Anao(Jogador):
                     self.__lvl_armadura = self.__lvl_armadura + 1
                     print(self._nome + " Subiu de nível em Armadura!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1774,14 +1728,12 @@ class Anao(Jogador):
                     self.__lvl_deducao = self.__lvl_deducao + 1
                     print(self._nome + " Subiu de nível em Dedução!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
             elif opcao == 8:
                 pass
-        else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+
         return
 
-#Tudo OK
 class Elfo(Jogador):
 
     def __init__(self, nome="Guest", hp=100, nivel_geral=0, lvl_brigar=0, lvl_apostar=0, lvl_forca=0, lvl_inteligencia=0, imunidade=8, lvl_artesanato=0, lvl_arcos=0, lvl_sintonia_natureza=0):
@@ -1854,7 +1806,6 @@ class Elfo(Jogador):
                 except ValueError:
                     raise ExcessaoTipoOpcaoInvalido()
                 
-
                 if opcao >= 6 and opcao <= 9:
                     break
                 else:
@@ -1866,7 +1817,7 @@ class Elfo(Jogador):
                     self.__lvl_artesanato = self.__lvl_artesanato + 1
                     print(self._nome + " Subiu de nível em Artesanato!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 7:
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1874,7 +1825,7 @@ class Elfo(Jogador):
                     self.__lvl_arcos = self.__lvl_arcos + 1
                     print(self._nome + " Subiu de nível em Artilharia de Arcos!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
 
             elif opcao == 8:
                 self._qtd_pontos = self._qtd_pontos - 1
@@ -1882,20 +1833,14 @@ class Elfo(Jogador):
                     self.__lvl_sintonia_natureza = self.__lvl_sintonia_natureza + 1
                     print(self._nome + " Subiu de nível em Sintonia da Natureza!")
                 else:
-                    raise ExcessaoNivelMaximo()
+                    print("Seu personagem já está com essa skill no nível Máximo!")
+                    
             elif opcao == 9:
                 pass
-        else:
-            raise ExcessaoPontosInsuficientesSubirNivel()
+
         return
 
-class ExcessaoNivelInvalido(Exception):
-
-    def __str__(self):
-        return f"Valor de nível Inválido, Mínimo 0 e Máximo 13!"
-
 #Dependendo do tipo de personagem, ele entra na função e pede os parâmetros necessários para a criação naquele jogador
-#Tudo OK
 def recebeParametrosJogador(tipo):
 
     console = Console()
@@ -2046,7 +1991,6 @@ def recebeParametrosJogador(tipo):
     return lista_parametros_tipo
 
 #O jogador pode começar com níveis, menos em profissão, profissão ele começa apenas com o lvl geral de profissao
-#Tudo OK
 class JogadorFactory:
 
     @staticmethod
@@ -2072,7 +2016,6 @@ class JogadorFactory:
 
         return jogador
     
-#Tudo OK
 def recebeParametrosProfissao():
 
     console.print(Panel(Align.center("Digite o valor de nível geral de profissão: 0-200")))
@@ -2090,7 +2033,6 @@ def recebeParametrosProfissao():
 
     return nivel_geral
     
-#Tudo OK
 class ProfissaoFactory:
 
     @staticmethod
@@ -2123,7 +2065,6 @@ class ProfissaoFactory:
 
         return profissao
 
-#Tudo OK
 def menu_jogador():
 
     console = Console()
@@ -2145,7 +2086,7 @@ def menu_jogador():
         try:
             opcao = int(input("Digite sua opção: "))
         except ValueError:
-            raise ExcessaoTipoOpcaoInvalido
+            raise ExcessaoTipoOpcaoInvalido()
 
         if(opcao >= 1 and opcao <= 4):
             break
@@ -2154,7 +2095,6 @@ def menu_jogador():
 
     return opcao
 
-#Tudo OK
 def menu_profissao():
 
     console = Console()
@@ -2190,7 +2130,37 @@ def menu_profissao():
         
     return opcao
 
- # -> Como se fosse um gerenciador do jogo
+def inicializaMusicaPrincipal():
+
+    audio1 = "lost_in_the_unknown.flac"
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(audio1)
+    pygame.mixer.music.play(-1)
+
+    return
+
+def inicializaMusicaBatalha():
+
+    audio2 = "BattleTheme2.mp3"
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(audio2)
+    pygame.mixer.music.play(-1)
+
+    return
+
+def inicializaMusicaUparSkills():
+
+    audio3 = "8bitBossa.mp3"
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(audio3)
+    pygame.mixer.music.play(-1)
+
+    return
+
+# -> Como se fosse um gerenciador do jogo
 def inicializaJogo():
 
     console = Console()
@@ -2199,15 +2169,10 @@ def inicializaJogo():
 
     verifica_saida = False
 
-    #Distrinchar isso em menu e em partes que vão chamar outras para funcionar
     while verifica_saida == False:
 
         #Inicializa a música principal
-        audio1 = "lost_in_the_unknown.flac"
-        pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load(audio1)
-        pygame.mixer.music.play(-1)
+        inicializaMusicaPrincipal()
 
         while True:
 
@@ -2224,7 +2189,8 @@ def inicializaJogo():
                     "3 - Upar Skills de Jogador \n"
                     "4 - Upar Skills de Profissão \n"
                     "5 - Atacar Monstro \n"
-                    "6 - Curar Personagem"
+                    "6 - Curar Personagem \n"
+                    "7 - Verificar Status do Personagem"
 
                 )))
 
@@ -2235,7 +2201,7 @@ def inicializaJogo():
 
             if((personagem_criado == False) and op >= 1 and op <= 2):
                 break
-            elif((personagem_criado == True) and op >=2 and op <= 6):
+            elif((personagem_criado == True) and op >=2 and op <= 7):
                 break
             else:
                 print("Digite uma opção válida!")
@@ -2243,7 +2209,6 @@ def inicializaJogo():
         match op:
 
             case 1:
-
                 personagem_criado = True
 
                 opcao_jogador = menu_jogador()
@@ -2261,16 +2226,20 @@ def inicializaJogo():
                 #Pra fazer uma transição mais suave em vez de só encerrar a música
                 pygame.mixer.music.fadeout(2000)
             case 3:
+                pygame.mixer.music.stop()
+                inicializaMusicaUparSkills()
+
                 obj_jogador.aumenta_nivel_habilidade()
             case 4:
+                pygame.mixer.music.stop()
+                inicializaMusicaUparSkills()
+
                 obj_jogador.getProfissao().aumenta_nivel_habilidade_profissao()
             case 5:
-
                 if(obj_jogador.getHp() > 0):
                     #Inicializa a música da batalha
                     pygame.mixer.music.stop()
-                    pygame.mixer.music.load("BattleTheme2.mp3")
-                    pygame.mixer.music.play(-1)
+                    inicializaMusicaBatalha()
 
                 #Fazendo uma pausa só pra dar tempo da música de batalha tocar
                 time.sleep(20)
@@ -2279,6 +2248,29 @@ def inicializaJogo():
                 obj_jogador.atacar(monstro)
             case 6:
                 obj_jogador.curar()
+            case 7:
+
+                barra = ""
+                tamanho_barra = 20
+                proporcao = obj_jogador.getHp() / obj_jogador.getHPMax()
+                quantidade_caracteres = int(proporcao * tamanho_barra)
+
+                for i in range(quantidade_caracteres):
+                    barra += "█"
+
+                for i in range(tamanho_barra - quantidade_caracteres):
+                    barra += "░"
+
+                console.print(Panel(Align.center(
+                    f"Nome: {obj_jogador.getNome()} \n"
+                    f"HP: {barra} {obj_jogador.getHp()}/{obj_jogador.getHPMax()} \n"
+                    f"Raça: {obj_jogador.getNomeRaca()} \n"
+                    f"Profissão: {obj_jogador.getProfissao().getNomeProfissao()} \n"
+
+                    f"Nível Geral de Jogador: {obj_jogador.getNivelGeral()} \n"
+                    f"Nível Geral da Profissão: {obj_jogador.getProfissao().getNivelGeral()} \n"
+                    f"Pontos de Habilidade Disponíveis: {obj_jogador.getQtdPontos()}"
+                ), title="✦ Status do Personagem ✦"))
 
     return
 
