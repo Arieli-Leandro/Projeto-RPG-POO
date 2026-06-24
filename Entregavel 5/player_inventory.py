@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-import time
-import pygame
+from pyfiglet import Figlet
 from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
@@ -1479,7 +1478,7 @@ class Jogador(ICombate, ICuravel):
                     f"{self._nome} ganhou {xp_ganho} pontos de experiência!"
                 ), title="✦ Vitória ✦"))
         else:
-            pass #Antes era um raise, mas ele impedia do jogo continuar em loop
+            raise ExcessaoJogadorSemVida()
 
         return
 
@@ -2192,13 +2191,6 @@ def inicializaJogo():
     #Distrinchar isso em menu e em partes que vão chamar outras para funcionar
     while verifica_saida == False:
 
-        #Inicializa a música principal
-        audio1 = "lost_in_the_unknown.flac"
-        pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load(audio1)
-        pygame.mixer.music.play(-1)
-
         while True:
 
             if(personagem_criado == False):
@@ -2247,24 +2239,11 @@ def inicializaJogo():
 
             case 2: 
                 verifica_saida = True
-
-                #Pra fazer uma transição mais suave em vez de só encerrar a música
-                pygame.mixer.music.fadeout(2000)
             case 3:
                 obj_jogador.aumenta_nivel_habilidade()
             case 4:
                 obj_jogador.getProfissao().aumenta_nivel_habilidade_profissao()
             case 5:
-
-                if(obj_jogador.getHp() > 0):
-                    #Inicializa a música da batalha
-                    pygame.mixer.music.stop()
-                    pygame.mixer.music.load("BattleTheme2.mp3")
-                    pygame.mixer.music.play(-1)
-
-                #Fazendo uma pausa só pra dar tempo da música de batalha tocar
-                time.sleep(20)
-
                 monstro = MonstroFactory.criar_monstro_aleatorio()
                 obj_jogador.atacar(monstro)
             case 6:
@@ -2275,12 +2254,11 @@ def inicializaJogo():
 if __name__ == "__main__":
     
     try:
-
+        
         console = Console()
 
         console.print(Panel(Align.center("\n The Witcher - RPG \n")))
 
         inicializaJogo()
-
     except Exception as e:
         print(e)
