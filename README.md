@@ -83,6 +83,9 @@ python player_inventory_interface.py
 ```
 
 ---
+# Diagrama UML do Projeto
+![Diagrama UML do Projeto](DiagramaUML.png)
+
 
 ## 👥 Autores
 
